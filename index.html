@@ -1,490 +1,780 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="description"
-        content="Deformable Neural Radiance Fields creates free-viewpoint portraits (nerfies) from casually captured videos.">
-  <meta name="keywords" content="Nerfies, D-NeRF, NeRF">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Nerfies: Deformable Neural Radiance Fields</title>
+  <meta name="description"
+        content="VNCultureVQA: a large-scale benchmark for knowledge-grounded Visual Question Answering on Vietnamese cultural events — 107,947 image–article pairs and 691,830 QA pairs across six cognitive levels.">
+  <meta name="keywords" content="VNCultureVQA, Vietnamese VQA, cultural VQA, knowledge-grounded VQA, multimodal benchmark, WACV 2027">
+  <title>VNCultureVQA: Benchmarking VQA for Vietnamese Cultural Events</title>
 
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
+  <!-- TODO: Open Graph / Twitter card image + URL once the page is deployed -->
+  <meta property="og:title" content="VNCultureVQA: Benchmarking VQA for Vietnamese Cultural Events">
+  <meta property="og:description" content="107,947 image–article pairs · 691,830 QA pairs · six cognitive levels">
+  <meta property="og:image" content="./static/images/teaser.webp">
 
-    function gtag() {
-      dataLayer.push(arguments);
-    }
-
-    gtag('js', new Date());
-
-    gtag('config', 'G-PYVRSFMDRL');
-  </script>
-
-  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Noto+Sans:ital,wght@0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;700&display=swap"
         rel="stylesheet">
 
   <link rel="stylesheet" href="./static/css/bulma.min.css">
   <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
-  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
-  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
-  <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
   <link rel="stylesheet" href="./static/css/index.css">
   <link rel="icon" href="./static/images/favicon.svg">
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script defer src="./static/js/fontawesome.all.min.js"></script>
-  <script src="./static/js/bulma-carousel.min.js"></script>
-  <script src="./static/js/bulma-slider.min.js"></script>
-  <script src="./static/js/index.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <script defer src="./static/js/bulma-carousel.min.js"></script>
+  <script defer src="./static/js/data.js"></script>
+  <script defer src="./static/js/index.js"></script>
 </head>
 <body>
 
-<nav class="navbar" role="navigation" aria-label="main navigation">
-  <div class="navbar-brand">
-    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
-      <span aria-hidden="true"></span>
-      <span aria-hidden="true"></span>
-      <span aria-hidden="true"></span>
-    </a>
-  </div>
-  <div class="navbar-menu">
-    <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
-      <a class="navbar-item" href="https://keunhong.com">
-      <span class="icon">
-          <i class="fas fa-home"></i>
-      </span>
+<!-- ================= Navbar ================= -->
+<nav class="navbar site-nav" role="navigation" aria-label="main navigation">
+  <div class="container is-max-widescreen">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="#top">VNCultureVQA</a>
+      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="nav-menu">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
       </a>
-
-      <div class="navbar-item has-dropdown is-hoverable">
-        <a class="navbar-link">
-          More Research
-        </a>
-        <div class="navbar-dropdown">
-          <a class="navbar-item" href="https://hypernerf.github.io">
-            HyperNeRF
-          </a>
-          <a class="navbar-item" href="https://nerfies.github.io">
-            Nerfies
-          </a>
-          <a class="navbar-item" href="https://latentfusion.github.io">
-            LatentFusion
-          </a>
-          <a class="navbar-item" href="https://photoshape.github.io">
-            PhotoShape
-          </a>
-        </div>
+    </div>
+    <div class="navbar-menu" id="nav-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="#overview">Overview</a>
+        <a class="navbar-item" href="#dataset">Dataset</a>
+        <a class="navbar-item" href="#statistics">Statistics</a>
+        <a class="navbar-item" href="#examples">Examples</a>
+        <a class="navbar-item" href="#benchmark">Benchmark</a>
+        <a class="navbar-item" href="#results">Results</a>
+        <a class="navbar-item" href="#citation">Citation</a>
       </div>
     </div>
-
   </div>
 </nav>
 
-
-<section class="hero">
+<!-- ================= Hero ================= -->
+<section class="hero site-hero" id="top">
   <div class="hero-body">
-    <div class="container is-max-desktop">
-      <div class="columns is-centered">
-        <div class="column has-text-centered">
-          <h1 class="title is-1 publication-title">Nerfies: Deformable Neural Radiance Fields</h1>
-          <div class="is-size-5 publication-authors">
-            <span class="author-block">
-              <a href="https://keunhong.com">Keunhong Park</a><sup>1</sup>,</span>
-            <span class="author-block">
-              <a href="https://utkarshsinha.com">Utkarsh Sinha</a><sup>2</sup>,</span>
-            <span class="author-block">
-              <a href="https://jonbarron.info">Jonathan T. Barron</a><sup>2</sup>,
-            </span>
-            <span class="author-block">
-              <a href="http://sofienbouaziz.com">Sofien Bouaziz</a><sup>2</sup>,
-            </span>
-            <span class="author-block">
-              <a href="https://www.danbgoldman.com">Dan B Goldman</a><sup>2</sup>,
-            </span>
-            <span class="author-block">
-              <a href="https://homes.cs.washington.edu/~seitz/">Steven M. Seitz</a><sup>1,2</sup>,
-            </span>
-            <span class="author-block">
-              <a href="http://www.ricardomartinbrualla.com">Ricardo Martin-Brualla</a><sup>2</sup>
-            </span>
-          </div>
+    <div class="container is-max-desktop has-text-centered">
+      <!-- TODO: confirm venue / track wording (e.g. "WACV 2027 · Datasets Track") -->
+      <span class="venue-badge"><i class="fas fa-landmark"></i> WACV 2027</span>
 
-          <div class="is-size-5 publication-authors">
-            <span class="author-block"><sup>1</sup>University of Washington,</span>
-            <span class="author-block"><sup>2</sup>Google Research</span>
-          </div>
+      <h1 class="title is-1 publication-title">
+        <span class="brand-name">VNCultureVQA</span>
+        Benchmarking VQA for Vietnamese Cultural Events
+      </h1>
 
-          <div class="column has-text-centered">
-            <div class="publication-links">
-              <!-- PDF Link. -->
-              <span class="link-block">
-                <a href="https://arxiv.org/pdf/2011.12948"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="fas fa-file-pdf"></i>
-                  </span>
-                  <span>Paper</span>
-                </a>
-              </span>
-              <span class="link-block">
-                <a href="https://arxiv.org/abs/2011.12948"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="ai ai-arxiv"></i>
-                  </span>
-                  <span>arXiv</span>
-                </a>
-              </span>
-              <!-- Video Link. -->
-              <span class="link-block">
-                <a href="https://www.youtube.com/watch?v=MrKrnHhk8IA"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="fab fa-youtube"></i>
-                  </span>
-                  <span>Video</span>
-                </a>
-              </span>
-              <!-- Code Link. -->
-              <span class="link-block">
-                <a href="https://github.com/google/nerfies"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="fab fa-github"></i>
-                  </span>
-                  <span>Code</span>
-                  </a>
-              </span>
-              <!-- Dataset Link. -->
-              <span class="link-block">
-                <a href="https://github.com/google/nerfies/releases/tag/0.1"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="far fa-images"></i>
-                  </span>
-                  <span>Data</span>
-                  </a>
+      <div class="is-size-5 publication-authors">
+        <!-- TODO: author homepage links -->
+        <span class="author-block"><a href="#">Van-Phuc Phan</a><sup>1,2†</sup></span>
+        <span class="author-block"><a href="#">Minh-Tan Pham</a><sup>1,2†</sup></span>
+        <span class="author-block"><a href="#">Trung-Nghia Le</a><sup>1,2‡</sup></span>
+      </div>
+      <div class="affiliations publication-authors">
+        <span class="author-block"><sup>1</sup>University of Science, Ho Chi Minh City, Vietnam</span>
+        <span class="author-block"><sup>2</sup>Vietnam National University, Ho Chi Minh City, Vietnam</span>
+      </div>
+      <p class="contrib-note"><sup>†</sup>Equal contribution &nbsp;·&nbsp; <sup>‡</sup>Corresponding author</p>
+
+      <!-- TODO: replace every href="#" below with the real links -->
+      <div class="publication-links">
+        <a href="#" class="button is-normal" title="Link coming soon">
+          <span class="icon"><i class="fas fa-file-pdf"></i></span><span>Paper</span><span class="todo">TODO</span>
+        </a>
+        <a href="#" class="button is-normal" title="Link coming soon">
+          <span class="icon"><i class="ai ai-arxiv"></i></span><span>arXiv</span><span class="todo">TODO</span>
+        </a>
+        <a href="#" class="button is-normal" title="Link coming soon">
+          <span class="icon"><i class="fab fa-github"></i></span><span>Code</span><span class="todo">TODO</span>
+        </a>
+        <a href="#" class="button is-normal" title="Link coming soon">
+          <span class="icon"><i class="fas fa-database"></i></span><span>Dataset</span><span class="todo">TODO</span>
+        </a>
+        <a href="#" class="button is-normal" title="Link coming soon">
+          <span class="icon" aria-hidden="true">🤗</span><span>Hugging Face</span><span class="todo">TODO</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= Teaser ================= -->
+<section class="section" style="padding-top: 0.5rem; padding-bottom: 2rem;">
+  <div class="container is-max-desktop">
+    <figure class="paper-figure teaser-figure">
+      <img src="./static/images/teaser.webp" width="1241" height="337"
+           alt="Three VNCultureVQA samples: a Sán Chỉ Sóong Cọ singing performance, the Khmer Phước Biển festival in Sóc Trăng, and a Thượng Tiêu pole ceremony, each with a Vietnamese question and answer.">
+      <figcaption>
+        <b>VNCultureVQA</b> is a large-scale dataset designed for Vietnamese cultural heritage. It features
+        high-quality image–question–answer triplets derived from rich contextual articles.
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ================= Stat cards ================= -->
+<section class="stats-band">
+  <div class="container is-max-desktop">
+    <div class="stat-grid">
+      <div class="stat-card"><div class="stat-value" data-count="28655">28,655</div><div class="stat-label">cultural articles</div></div>
+      <div class="stat-card"><div class="stat-value" data-count="107947">107,947</div><div class="stat-label">image–article pairs</div></div>
+      <div class="stat-card"><div class="stat-value" data-count="691830">691,830</div><div class="stat-label">QA pairs</div></div>
+      <div class="stat-card"><div class="stat-value" data-count="6">6</div><div class="stat-label">cognitive levels</div></div>
+      <div class="stat-card"><div class="stat-value" data-count="8">8</div><div class="stat-label">Vietnamese news outlets</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= Overview: Abstract + contributions ================= -->
+<section class="section alt" id="overview">
+  <div class="container is-max-desktop">
+    <div class="section-head">
+      <p class="section-kicker">Overview</p>
+      <h2 class="title is-2">Abstract</h2>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-11">
+        <div class="content has-text-justified">
+          <p>
+            Visual Question Answering (VQA) in low-resource languages remains largely disconnected from the cultural
+            and contextual knowledge required to interpret real-world imagery. Existing Vietnamese VQA benchmarks
+            primarily treat images as isolated inputs, limiting evaluation to visual recognition rather than
+            knowledge-grounded multimodal reasoning. We introduce <span class="brand-name">VNCultureVQA</span>, a
+            large-scale benchmark for Vietnamese cultural understanding that jointly grounds images and questions in
+            real-world cultural articles, linking each image to its source article, human-authored caption, and
+            contextual knowledge. VNCultureVQA contains <strong>107,947 image–article pairs</strong> and
+            <strong>691,830 question–answer pairs</strong> spanning <strong>six cognitive levels</strong>, from visual
+            recognition to global contextual synthesis.
+          </p>
+          <p>
+            The benchmark supports knowledge-grounded generative VQA under progressively enriched contextual settings,
+            enabling evaluation of visual understanding and culturally grounded multimodal reasoning. We further
+            establish three progressively enriched evaluation settings, ranging from image-only VQA to article-grounded
+            VQA and supervised domain adaptation. Experiments with representative Vietnamese and multilingual
+            vision-language models show consistent gains from contextual grounding, while consensus and lexical scores
+            degrade steadily as reasoning demands increase and supervised domain adaptation yields uneven improvements,
+            revealing persistent limitations in current multimodal models.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="sub-title">Contributions</h3>
+    <div class="columns is-multiline">
+      <div class="column is-4">
+        <div class="card-plain">
+          <span class="icon-chip"><i class="fas fa-database"></i></span>
+          <h4>Large-scale cultural benchmark</h4>
+          <p>107k image–article pairs and 691k QA pairs, nearly <strong>50×</strong> larger than ViVQA and far beyond
+            the 14k questions of OK-VQA.</p>
+        </div>
+      </div>
+      <div class="column is-4">
+        <div class="card-plain">
+          <span class="icon-chip gold"><i class="fas fa-layer-group"></i></span>
+          <h4>Six-level cognitive taxonomy</h4>
+          <p>A construction pipeline that generates and organises questions from basic visual recognition up to
+            multimodal contextual and cultural reasoning.</p>
+        </div>
+      </div>
+      <div class="column is-4">
+        <div class="card-plain">
+          <span class="icon-chip"><i class="fas fa-chart-bar"></i></span>
+          <h4>Progressive-context benchmark</h4>
+          <p>Open-source VLMs evaluated from image-only to article-grounded and fine-tuned settings, exposing gaps for
+            Vietnamese and multilingual models.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= Dataset construction ================= -->
+<section class="section" id="dataset">
+  <div class="container is-max-desktop">
+    <div class="section-head">
+      <p class="section-kicker">Dataset</p>
+      <h2 class="title is-2">Construction Pipeline</h2>
+      <p class="lead">Each article is modelled as a <em>unified multimodal knowledge source</em>: full body text,
+        embedded images and human-authored captions are kept together, so every question is grounded in the
+        narrative its image came from.</p>
+    </div>
+
+    <figure class="paper-figure framed">
+      <img src="./static/images/news_example.webp" width="1800" height="613" loading="lazy"
+           alt="Screenshots of two source articles from Pháp Luật (plo.vn) and Tiền Phong (tienphong.vn), culture sections.">
+      <figcaption><b>Source articles.</b> Culture-section articles from eight major Vietnamese news platforms
+        (shown: plo.vn and tienphong.vn) provide images, captions and full article context.</figcaption>
+    </figure>
+
+    <h3 class="sub-title">Multi-stage generative pipeline</h3>
+    <figure class="paper-figure framed">
+      <img src="./static/images/pipeline.webp" width="1053" height="575" loading="lazy"
+           alt="Five-stage pipeline: web crawl, caption generation with Qwen3-VL-8B, question generation and answer generation with Gemini 3 Pro, and verification with Llama 3 8B.">
+      <figcaption><b>Overview of the multi-stage database construction pipeline.</b></figcaption>
+    </figure>
+
+    <div class="stepper" style="margin-top: 2rem;">
+      <div class="step">
+        <h5>Multi-source Collection</h5>
+        <p>Crawlers gather 28,655 articles and 113,554 high-resolution images from eight news platforms.</p>
+        <span class="model-tag">web crawlers</span>
+      </div>
+      <div class="step">
+        <h5>Contextual Captioning</h5>
+        <p>Information-rich captions link image and article; each image is assigned one of nine cultural domains.</p>
+        <span class="model-tag">Qwen3-VL-8B</span>
+      </div>
+      <div class="step">
+        <h5>Question Generation</h5>
+        <p>Captions bridge visual evidence and article context to produce questions beyond simple recognition.</p>
+        <span class="model-tag">Qwen3-VL · Gemini 3 Pro</span>
+      </div>
+      <div class="step">
+        <h5>Article-Grounded Answers</h5>
+        <p>Answers are synthesised by extracting evidence directly from the full source article.</p>
+        <span class="model-tag">Gemini 3 Pro</span>
+      </div>
+      <div class="step">
+        <h5>Factual Verification</h5>
+        <p>Each QA pair is cross-checked against its article; images with &lt; 3 verified pairs are discarded.</p>
+        <span class="model-tag">Llama 3 8B</span>
+      </div>
+    </div>
+
+    <div class="columns" style="margin-top: 2rem;">
+      <div class="column is-7">
+        <div class="callout">
+          <span class="icon"><i class="fas fa-check-double"></i></span>
+          <p><strong>Human-in-the-loop quality assurance.</strong> After automated filtering by GPT-4o, native
+            Vietnamese annotators verify samples for factuality against the source article, visual relevance and
+            linguistic purity. Invalid pairs are removed and regenerated so every retained image keeps at least four
+            verified QA pairs.</p>
+        </div>
+      </div>
+      <div class="column is-5">
+        <div class="columns is-mobile" style="height: 100%;">
+          <div class="column">
+            <div class="stat-card" style="height: 100%;">
+              <div class="stat-value">94.2%</div><div class="stat-label">annotator agreement</div>
             </div>
-
           </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="hero teaser">
-  <div class="container is-max-desktop">
-    <div class="hero-body">
-      <video id="teaser" autoplay muted loop playsinline height="100%">
-        <source src="./static/videos/teaser.mp4"
-                type="video/mp4">
-      </video>
-      <h2 class="subtitle has-text-centered">
-        <span class="dnerf">Nerfies</span> turns selfie videos from your phone into
-        free-viewpoint
-        portraits.
-      </h2>
-    </div>
-  </div>
-</section>
-
-
-<section class="hero is-light is-small">
-  <div class="hero-body">
-    <div class="container">
-      <div id="results-carousel" class="carousel results-carousel">
-        <div class="item item-steve">
-          <video poster="" id="steve" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/steve.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-chair-tp">
-          <video poster="" id="chair-tp" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/chair-tp.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-shiba">
-          <video poster="" id="shiba" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/shiba.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-fullbody">
-          <video poster="" id="fullbody" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/fullbody.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-blueshirt">
-          <video poster="" id="blueshirt" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/blueshirt.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-mask">
-          <video poster="" id="mask" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/mask.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-coffee">
-          <video poster="" id="coffee" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/coffee.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-toby">
-          <video poster="" id="toby" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/toby2.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-<section class="section">
-  <div class="container is-max-desktop">
-    <!-- Abstract. -->
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-four-fifths">
-        <h2 class="title is-3">Abstract</h2>
-        <div class="content has-text-justified">
-          <p>
-            We present the first method capable of photorealistically reconstructing a non-rigidly
-            deforming scene using photos/videos captured casually from mobile phones.
-          </p>
-          <p>
-            Our approach augments neural radiance fields
-            (NeRF) by optimizing an
-            additional continuous volumetric deformation field that warps each observed point into a
-            canonical 5D NeRF.
-            We observe that these NeRF-like deformation fields are prone to local minima, and
-            propose a coarse-to-fine optimization method for coordinate-based models that allows for
-            more robust optimization.
-            By adapting principles from geometry processing and physical simulation to NeRF-like
-            models, we propose an elastic regularization of the deformation field that further
-            improves robustness.
-          </p>
-          <p>
-            We show that <span class="dnerf">Nerfies</span> can turn casually captured selfie
-            photos/videos into deformable NeRF
-            models that allow for photorealistic renderings of the subject from arbitrary
-            viewpoints, which we dub <i>"nerfies"</i>. We evaluate our method by collecting data
-            using a
-            rig with two mobile phones that take time-synchronized photos, yielding train/validation
-            images of the same pose at different viewpoints. We show that our method faithfully
-            reconstructs non-rigidly deforming scenes and reproduces unseen views with high
-            fidelity.
-          </p>
-        </div>
-      </div>
-    </div>
-    <!--/ Abstract. -->
-
-    <!-- Paper video. -->
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-four-fifths">
-        <h2 class="title is-3">Video</h2>
-        <div class="publication-video">
-          <iframe src="https://www.youtube.com/embed/MrKrnHhk8IA?rel=0&amp;showinfo=0"
-                  frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-        </div>
-      </div>
-    </div>
-    <!--/ Paper video. -->
-  </div>
-</section>
-
-
-<section class="section">
-  <div class="container is-max-desktop">
-
-    <div class="columns is-centered">
-
-      <!-- Visual Effects. -->
-      <div class="column">
-        <div class="content">
-          <h2 class="title is-3">Visual Effects</h2>
-          <p>
-            Using <i>nerfies</i> you can create fun visual effects. This Dolly zoom effect
-            would be impossible without nerfies since it would require going through a wall.
-          </p>
-          <video id="dollyzoom" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/dollyzoom-stacked.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-      </div>
-      <!--/ Visual Effects. -->
-
-      <!-- Matting. -->
-      <div class="column">
-        <h2 class="title is-3">Matting</h2>
-        <div class="columns is-centered">
-          <div class="column content">
-            <p>
-              As a byproduct of our method, we can also solve the matting problem by ignoring
-              samples that fall outside of a bounding box during rendering.
-            </p>
-            <video id="matting-video" controls playsinline height="100%">
-              <source src="./static/videos/matting.mp4"
-                      type="video/mp4">
-            </video>
-          </div>
-
-        </div>
-      </div>
-    </div>
-    <!--/ Matting. -->
-
-    <!-- Animation. -->
-    <div class="columns is-centered">
-      <div class="column is-full-width">
-        <h2 class="title is-3">Animation</h2>
-
-        <!-- Interpolating. -->
-        <h3 class="title is-4">Interpolating states</h3>
-        <div class="content has-text-justified">
-          <p>
-            We can also animate the scene by interpolating the deformation latent codes of two input
-            frames. Use the slider here to linearly interpolate between the left frame and the right
-            frame.
-          </p>
-        </div>
-        <div class="columns is-vcentered interpolation-panel">
-          <div class="column is-3 has-text-centered">
-            <img src="./static/images/interpolate_start.jpg"
-                 class="interpolation-image"
-                 alt="Interpolate start reference image."/>
-            <p>Start Frame</p>
-          </div>
-          <div class="column interpolation-video-column">
-            <div id="interpolation-image-wrapper">
-              Loading...
+          <div class="column">
+            <div class="stat-card" style="height: 100%;">
+              <div class="stat-value">κ = 0.82</div><div class="stat-label">Cohen's kappa<br>(near-perfect)</div>
             </div>
-            <input class="slider is-fullwidth is-large is-info"
-                   id="interpolation-slider"
-                   step="1" min="0" max="100" value="0" type="range">
           </div>
-          <div class="column is-3 has-text-centered">
-            <img src="./static/images/interpolate_end.jpg"
-                 class="interpolation-image"
-                 alt="Interpolation end reference image."/>
-            <p class="is-bold">End Frame</p>
-          </div>
-        </div>
-        <br/>
-        <!--/ Interpolating. -->
-
-        <!-- Re-rendering. -->
-        <h3 class="title is-4">Re-rendering the input video</h3>
-        <div class="content has-text-justified">
-          <p>
-            Using <span class="dnerf">Nerfies</span>, you can re-render a video from a novel
-            viewpoint such as a stabilized camera by playing back the training deformations.
-          </p>
-        </div>
-        <div class="content has-text-centered">
-          <video id="replay-video"
-                 controls
-                 muted
-                 preload
-                 playsinline
-                 width="75%">
-            <source src="./static/videos/replay.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <!--/ Re-rendering. -->
-
-      </div>
-    </div>
-    <!--/ Animation. -->
-
-
-    <!-- Concurrent Work. -->
-    <div class="columns is-centered">
-      <div class="column is-full-width">
-        <h2 class="title is-3">Related Links</h2>
-
-        <div class="content has-text-justified">
-          <p>
-            There's a lot of excellent work that was introduced around the same time as ours.
-          </p>
-          <p>
-            <a href="https://arxiv.org/abs/2104.09125">Progressive Encoding for Neural Optimization</a> introduces an idea similar to our windowed position encoding for coarse-to-fine optimization.
-          </p>
-          <p>
-            <a href="https://www.albertpumarola.com/research/D-NeRF/index.html">D-NeRF</a> and <a href="https://gvv.mpi-inf.mpg.de/projects/nonrigid_nerf/">NR-NeRF</a>
-            both use deformation fields to model non-rigid scenes.
-          </p>
-          <p>
-            Some works model videos with a NeRF by directly modulating the density, such as <a href="https://video-nerf.github.io/">Video-NeRF</a>, <a href="https://www.cs.cornell.edu/~zl548/NSFF/">NSFF</a>, and <a href="https://neural-3d-video.github.io/">DyNeRF</a>
-          </p>
-          <p>
-            There are probably many more by the time you are reading this. Check out <a href="https://dellaert.github.io/NeRF/">Frank Dellart's survey on recent NeRF papers</a>, and <a href="https://github.com/yenchenlin/awesome-NeRF">Yen-Chen Lin's curated list of NeRF papers</a>.
-          </p>
         </div>
       </div>
     </div>
-    <!--/ Concurrent Work. -->
 
+    <!-- Taxonomy -->
+    <h3 class="sub-title" id="taxonomy">Six-level cognitive taxonomy</h3>
+    <p class="content" style="color: var(--ink-2);">
+      Questions are organised into three meta-groups. Purely visual questions are deliberately capped at 8.2% to
+      mitigate visual shortcuts and language priors; <strong>92.0%</strong> of questions require multimodal
+      integration or higher-level reasoning.
+    </p>
+    <div class="columns" id="taxonomy-cards"><!-- rendered by index.js --></div>
+
+    <div class="columns is-vcentered" style="margin-top: 0.5rem;">
+      <div class="column is-7">
+        <div class="chart-card">
+          <h4>QA pairs per difficulty level</h4>
+          <p class="chart-sub">Share of all 691,830 QA pairs (%). Level 5 is the single largest tier.</p>
+          <div class="chart-legend" id="legend-levels"></div>
+          <div class="chart-wrap short"><canvas id="chart-levels" aria-label="Bar chart of QA share per difficulty level" role="img"></canvas></div>
+        </div>
+      </div>
+      <div class="column is-5">
+        <p class="content" style="color: var(--ink-2); font-size: 0.95rem;">
+          Visual-only questions are first detected with keyword and POS analysis and validated zero-shot with
+          Qwen3-VL-8B. The rest are scored with Chain-of-Thought prompting and a weighted ensemble:
+        </p>
+        <div class="formula-box">
+          $$S_{\text{final}} = 0.7 \cdot S_{\text{Gem}} + 0.3 \cdot S_{\text{Qwen}}$$
+        </div>
+        <p class="chart-caption">The higher Gemini weight reflects its stronger reasoning capability on Levels 5–6.</p>
+      </div>
+    </div>
   </div>
 </section>
 
+<!-- ================= Statistics ================= -->
+<section class="section alt" id="statistics">
+  <div class="container is-max-desktop">
+    <div class="section-head">
+      <p class="section-kicker">Statistics</p>
+      <h2 class="title is-2">Dataset at a Glance</h2>
+      <p class="lead">To our knowledge, the largest Vietnamese VQA dataset grounded in real-world news articles.
+        Splits are stratified at the image level (5 : 2 : 2 : 1), and Test 1 → Test 3 increase in reasoning difficulty.</p>
+    </div>
 
-<section class="section" id="BibTeX">
-  <div class="container is-max-desktop content">
-    <h2 class="title">BibTeX</h2>
-    <pre><code>@article{park2021nerfies,
-  author    = {Park, Keunhong and Sinha, Utkarsh and Barron, Jonathan T. and Bouaziz, Sofien and Goldman, Dan B and Seitz, Steven M. and Martin-Brualla, Ricardo},
-  title     = {Nerfies: Deformable Neural Radiance Fields},
-  journal   = {ICCV},
-  year      = {2021},
+    <div class="tabs is-centered vn-tabs" data-tabs="stats">
+      <ul>
+        <li class="is-active"><a data-tab="stats-splits">Splits</a></li>
+        <li><a data-tab="stats-sources">Sources &amp; Domains</a></li>
+        <li><a data-tab="stats-difficulty">Difficulty</a></li>
+        <li><a data-tab="stats-language">Language</a></li>
+      </ul>
+    </div>
+
+    <!-- Splits -->
+    <div class="tab-pane is-active" id="stats-splits">
+      <div class="table-wrap">
+        <table class="vn-table" id="table-overall"><!-- rendered by index.js --></table>
+      </div>
+      <p class="table-note">Overall statistics of VNCultureVQA per official split.</p>
+      <div class="columns" style="margin-top: 1.25rem;">
+        <div class="column is-12">
+          <div class="chart-card">
+            <h4>Questions and answers get longer in harder splits</h4>
+            <p class="chart-sub">Average length in words. Every image is also linked to a contextual caption averaging 97.7 words.</p>
+            <div class="chart-legend" id="legend-lengths"></div>
+            <div class="chart-wrap short"><canvas id="chart-lengths" aria-label="Grouped bar chart of average question and answer length per split" role="img"></canvas></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sources & domains -->
+    <div class="tab-pane" id="stats-sources">
+      <div class="columns">
+        <div class="column is-6">
+          <div class="chart-card">
+            <h4>Images per news outlet</h4>
+            <p class="chart-sub">107,947 images from eight professionally edited Vietnamese platforms.</p>
+            <div class="chart-wrap tall"><canvas id="chart-sources" aria-label="Horizontal bar chart of images per source" role="img"></canvas></div>
+          </div>
+        </div>
+        <div class="column is-6">
+          <div class="chart-card">
+            <h4>Image semantic categories</h4>
+            <p class="chart-sub">Share of images (%) assigned during caption generation.</p>
+            <div class="chart-wrap tall"><canvas id="chart-categories" aria-label="Horizontal bar chart of image categories" role="img"></canvas></div>
+          </div>
+        </div>
+      </div>
+      <p class="chart-caption">Events/Ceremonies dominate (43.2%), reflecting the news-centric source material; Traditional
+        Arts and Culture add a further 33.7%, spanning tangible monuments, intangible traditions and daily community life.</p>
+    </div>
+
+    <!-- Difficulty -->
+    <div class="tab-pane" id="stats-difficulty">
+      <figure class="paper-figure framed">
+        <img src="./static/images/difficulty_per_split.webp" width="1800" height="660" loading="lazy"
+             alt="Difficulty level distribution and composition per split.">
+        <figcaption><b>Difficulty across splits.</b> Harder test splits concentrate Level 5–6 questions.
+          <span class="todo">TODO: figure labels read Val1/Val2/Test — regenerate as Test 1/2/3</span></figcaption>
+      </figure>
+    </div>
+
+    <!-- Language -->
+    <div class="tab-pane" id="stats-language">
+      <figure class="paper-figure framed">
+        <img src="./static/images/length_distribution.webp" width="1800" height="1185" loading="lazy"
+             alt="Histograms of question and answer length in characters and words.">
+        <figcaption><b>Question &amp; answer length.</b> Questions average 16.9 words and answers 32.6 words —
+          open-ended, generative responses rather than single-word answers.</figcaption>
+      </figure>
+
+      <h3 class="sub-title">Question types</h3>
+      <div class="control-row">
+        <span class="control-label">Split</span>
+        <div class="segmented" data-swap="qtype-img" data-pattern="./static/images/qtype_{v}.webp">
+          <button class="is-active" data-v="train">Train</button>
+          <button data-v="test1">Test 1</button>
+          <button data-v="test2">Test 2</button>
+          <button data-v="test3">Test 3</button>
+        </div>
+      </div>
+      <figure class="paper-figure framed">
+        <img id="qtype-img" src="./static/images/qtype_train.webp" width="1600" height="800" loading="lazy"
+             alt="Question type counts by first word (English translation) for the selected split.">
+        <figcaption><b>Question type counts</b> by first word of the English-translated question.</figcaption>
+      </figure>
+
+      <h3 class="sub-title">Word clouds</h3>
+      <div class="control-row" id="wc-controls">
+        <span class="control-label">Split</span>
+        <div class="segmented" data-wc="split">
+          <button class="is-active" data-v="train">Train</button>
+          <button data-v="test1">Test 1</button>
+          <button data-v="test2">Test 2</button>
+          <button data-v="test3">Test 3</button>
+        </div>
+        <span class="control-label">Field</span>
+        <div class="segmented" data-wc="field">
+          <button class="is-active" data-v="question">Question</button>
+          <button data-v="answer">Answer</button>
+        </div>
+      </div>
+      <div class="wc-frame">
+        <img id="wc-img" src="./static/images/wc_train_question.webp" width="1200" height="636" loading="lazy"
+             alt="Word cloud of English-translated questions in the train split.">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= Examples ================= -->
+<section class="section" id="examples">
+  <div class="container is-max-desktop">
+    <div class="section-head">
+      <p class="section-kicker">Examples</p>
+      <h2 class="title is-2">Dataset Samples</h2>
+      <p class="lead">Each sample links an image to its source article, caption and a Vietnamese question–answer pair.</p>
+    </div>
+  </div>
+  <div class="container is-max-widescreen">
+    <div class="carousel example-carousel" id="example-carousel">
+      <div class="item">
+        <div class="example-card">
+          <img src="./static/images/example_1.webp" width="392" height="337" loading="lazy"
+               alt="Sán Chỉ artists performing Sóong Cọ singing on stage.">
+          <div class="example-meta">
+            <span class="tag is-cat">Category</span><span class="tag is-level">Level</span><span class="todo">TODO</span>
+            <p style="margin-top: 0.5rem;">Who are the performers? — Sán Chỉ artists performing Sóong Cọ singing.</p>
+          </div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="example-card">
+          <img src="./static/images/example_2.webp" width="394" height="337" loading="lazy"
+               alt="Khmer community gathered at a pagoda for the Phước Biển festival in Sóc Trăng.">
+          <div class="example-meta">
+            <span class="tag is-cat">Category</span><span class="tag is-level">Level</span><span class="todo">TODO</span>
+            <p style="margin-top: 0.5rem;">Meaning of the Phước Biển festival for the Khmer people of Sóc Trăng.</p>
+          </div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="example-card">
+          <img src="./static/images/example_3.webp" width="393" height="337" loading="lazy"
+               alt="A Thượng Tiêu ceremonial pole raised in front of an imperial building.">
+          <div class="example-meta">
+            <span class="tag is-cat">Category</span><span class="tag is-level">Level</span><span class="todo">TODO</span>
+            <p style="margin-top: 0.5rem;">Symbolism of the Thượng Tiêu pole marking the start of spring.</p>
+          </div>
+        </div>
+      </div>
+      <!-- TODO: replace placeholder slides with more dataset samples -->
+      <div class="item">
+        <div class="example-card">
+          <div class="placeholder-box">
+            <span class="icon"><i class="fas fa-image"></i></span>
+            <span>Sample image</span><span class="todo">TODO</span>
+          </div>
+          <div class="example-meta"><p>Question / answer for an additional sample (e.g. Architecture, Food &amp; Cuisine).</p></div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="example-card">
+          <div class="placeholder-box">
+            <span class="icon"><i class="fas fa-image"></i></span>
+            <span>Sample image</span><span class="todo">TODO</span>
+          </div>
+          <div class="example-meta"><p>Question / answer for an additional sample (e.g. Level 6 Global Synthesis).</p></div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="example-card">
+          <div class="placeholder-box">
+            <span class="icon"><i class="fas fa-image"></i></span>
+            <span>Sample image</span><span class="todo">TODO</span>
+          </div>
+          <div class="example-meta"><p>Question / answer for an additional sample (e.g. Level 1 Object Recognition).</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container is-max-desktop" style="margin-top: 2.5rem;">
+    <h3 class="sub-title">Comparison with existing datasets</h3>
+    <div class="table-wrap">
+      <table class="vn-table" id="table-comparison"><!-- rendered by index.js --></table>
+    </div>
+    <div class="chart-card" style="margin-top: 1.25rem;">
+      <h4>QA pairs per dataset</h4>
+      <p class="chart-sub">Log scale — VNCultureVQA is about 2.5× larger than the next-largest benchmark (CoralVQA) and 46× larger than ViVQA.</p>
+      <div class="chart-wrap short"><canvas id="chart-comparison" aria-label="Bar chart comparing QA pair counts across datasets" role="img"></canvas></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= Benchmark ================= -->
+<section class="section alt" id="benchmark">
+  <div class="container is-max-desktop">
+    <div class="section-head">
+      <p class="section-kicker">Benchmark</p>
+      <h2 class="title is-2">Knowledge-Grounded Generative VQA</h2>
+      <p class="lead">Given an image <em>I</em>, its caption <em>C</em>, a question <em>Q</em> and article context
+        <em>A</em>, a model generates a free-form Vietnamese answer.</p>
+    </div>
+
+    <div class="columns is-vcentered">
+      <div class="column is-7">
+        <figure class="paper-figure framed">
+          <img src="./static/images/task_definition.webp" width="1600" height="975" loading="lazy"
+               alt="Task illustration: an article about Quan họ singing in Hanoi with an image, a question about the architectural setting, and the answer.">
+          <figcaption><b>Task illustration.</b> The answer requires linking the visual scene to the Quan họ
+            cultural space described in the article.</figcaption>
+        </figure>
+      </div>
+      <div class="column is-5">
+        <div class="formula-box" style="margin-bottom: 1rem;">
+          $$\hat{y} = \mathcal{M}(I,\, Q,\, C,\, A)$$
+        </div>
+        <p class="content" style="color: var(--ink-2); font-size: 0.95rem;">
+          The ground-truth article is supplied in every context-aware level. This is a deliberate scope boundary:
+          retrieving the source article is a separate problem, and conflating the two would make it impossible to
+          tell whether an incorrect answer originates in reasoning or in retrieval.
+        </p>
+      </div>
+    </div>
+
+    <h3 class="sub-title">Three context levels</h3>
+    <div class="columns">
+      <div class="column is-4">
+        <div class="card-plain ctx-card">
+          <span class="lvl-pill L1">L1</span>
+          <h4 style="margin-top: 0.5rem;">Image + Question</h4>
+          <div class="ctx-inputs"><span class="ctx-chip on">I</span><span class="ctx-chip on">Q</span><span class="ctx-chip">C</span><span class="ctx-chip">A</span></div>
+          <p>Zero-shot standard VQA without article context — the visual-only floor and ablation anchor.</p>
+        </div>
+      </div>
+      <div class="column is-4">
+        <div class="card-plain ctx-card">
+          <span class="lvl-pill L2">L2</span>
+          <h4 style="margin-top: 0.5rem;">+ Caption + Article</h4>
+          <div class="ctx-inputs"><span class="ctx-chip on">I</span><span class="ctx-chip on">Q</span><span class="ctx-chip on">C</span><span class="ctx-chip on">A</span></div>
+          <p>Article-grounded, zero-shot: the full-context ceiling without domain-specific fine-tuning.</p>
+        </div>
+      </div>
+      <div class="column is-4">
+        <div class="card-plain ctx-card">
+          <span class="lvl-pill L3">L3</span>
+          <h4 style="margin-top: 0.5rem;">Fine-tuned</h4>
+          <div class="ctx-inputs"><span class="ctx-chip on">I</span><span class="ctx-chip on">Q</span><span class="ctx-chip on">C</span><span class="ctx-chip on">A<sub>top-k</sub></span><span class="ctx-chip ft">SFT</span></div>
+          <p>Trained on the full training split with the L2 prompt — the ceiling attainable with domain adaptation.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="sub-title">Baseline models</h3>
+    <div class="table-wrap">
+      <table class="vn-table" id="table-models"><!-- rendered by index.js --></table>
+    </div>
+    <p class="table-note">InternVL3-8B and Qwen2.5-VL-7B act as dense anchors; Vintern-1B-v3.5 is a Vietnamese-native
+      model; Gemma3-VL-12B-it probes long-context behaviour. All models generate at most 32 new tokens.</p>
+
+    <h3 class="sub-title">Training recipe</h3>
+    <div class="columns">
+      <div class="column is-6">
+        <div class="card-plain">
+          <span class="icon-chip gold"><i class="fas fa-project-diagram"></i></span>
+          <h4>Phase 1 · MLP pretraining</h4>
+          <p>A 2-layer projector (Linear → LayerNorm → GELU → Linear) maps visual features into the LLM embedding
+            space with an image-to-caption objective. Vision encoder and LLM stay frozen.</p>
+        </div>
+      </div>
+      <div class="column is-6">
+        <div class="card-plain">
+          <span class="icon-chip"><i class="fas fa-brain"></i></span>
+          <h4>Phase 2 · Supervised fine-tuning</h4>
+          <p>multilingual-E5 keeps the top-<em>k</em> article passages for <em>Q</em>; the prompt
+            {<em>I, C, A<sub>top-k</sub>, Q</em>} trains QLoRA adapters on attention projections jointly with the
+            projector, with loss on answer tokens only. Greedy decoding throughout.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="sub-title">Evaluation metrics</h3>
+    <div class="columns is-multiline">
+      <div class="column is-3-desktop is-6-tablet">
+        <div class="card-plain"><h4>BERTScore P/R/F1</h4><p>Semantic similarity with xlm-roberta-base, no baseline rescaling. F1 is primary.</p></div>
+      </div>
+      <div class="column is-3-desktop is-6-tablet">
+        <div class="card-plain"><h4>CIDEr</h4><p>TF-IDF weighted <em>n</em>-gram consensus with the reference (primary).</p></div>
+      </div>
+      <div class="column is-3-desktop is-6-tablet">
+        <div class="card-plain"><h4>EM · Token F1 · BLEU-4 · METEOR</h4><p>Lexical references for comparability with prior Vietnamese VQA.</p></div>
+      </div>
+      <div class="column is-3-desktop is-6-tablet">
+        <div class="card-plain"><h4>Latency</h4><p>Mean wall-clock time per generated answer (ms).</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= Results ================= -->
+<section class="section" id="results">
+  <div class="container is-max-desktop">
+    <div class="section-head">
+      <p class="section-kicker">Results</p>
+      <h2 class="title is-2">Benchmark Results</h2>
+      <p class="lead">Four open-source VLMs across three context levels and three difficulty-stratified test splits.</p>
+    </div>
+
+    <div class="chart-card">
+      <div class="control-row">
+        <span class="control-label">Split</span>
+        <div class="segmented" id="ctl-split">
+          <button class="is-active" data-v="Test 1">Test 1</button>
+          <button data-v="Test 2">Test 2</button>
+          <button data-v="Test 3">Test 3</button>
+        </div>
+        <span class="control-label">Metric</span>
+        <div class="segmented" id="ctl-metric">
+          <button class="is-active" data-v="cider">CIDEr</button>
+          <button data-v="f1">Token F1</button>
+          <button data-v="bleu">BLEU-4</button>
+          <button data-v="meteor">METEOR</button>
+          <button data-v="bf1">BERTScore F1</button>
+          <button data-v="lat">Latency</button>
+        </div>
+      </div>
+      <h4 id="results-chart-title">CIDEr by model and context level — Test 1</h4>
+      <p class="chart-sub" id="results-chart-sub">Higher is better.</p>
+      <div class="chart-legend" id="legend-results"></div>
+      <div class="chart-wrap tall"><canvas id="chart-results" aria-label="Grouped bar chart of results per model and context level" role="img"></canvas></div>
+    </div>
+
+    <div class="columns" style="margin-top: 1.5rem;">
+      <div class="column is-7">
+        <div class="chart-card">
+          <div class="control-row" style="margin-bottom: 0.5rem;">
+            <span class="control-label">Level</span>
+            <div class="segmented" id="ctl-trend-level">
+              <button data-v="0">L1</button>
+              <button class="is-active" data-v="1">L2</button>
+              <button data-v="2">L3</button>
+            </div>
+          </div>
+          <h4>CIDEr drops as reasoning difficulty rises</h4>
+          <p class="chart-sub">CIDEr per model from Test 1 (easiest) to Test 3 (hardest).</p>
+          <div class="chart-legend" id="legend-trend"></div>
+          <div class="chart-wrap"><canvas id="chart-trend" aria-label="Line chart of CIDEr across test splits per model" role="img"></canvas></div>
+        </div>
+      </div>
+      <div class="column is-5">
+        <div class="finding" style="margin-bottom: 1.25rem;">
+          <span class="num-badge">1</span>
+          <div>
+            <h4 class="title is-6">Article context helps</h4>
+            <p style="color: var(--ink-2); font-size: 0.92rem;">L2 raises Token F1, BLEU, METEOR and CIDEr over
+              image-only L1 — e.g. InternVL3-8B on Test 1: CIDEr <strong>0.393 → 0.733</strong>. BERTScore F1 rises
+              too, but only by +0.001 to +0.014.</p>
+          </div>
+        </div>
+        <div class="finding" style="margin-bottom: 1.25rem;">
+          <span class="num-badge">2</span>
+          <div>
+            <h4 class="title is-6">Fine-tuning is selective</h4>
+            <p style="color: var(--ink-2); font-size: 0.92rem;">L3 gives Qwen2.5-VL its best CIDEr on every split and
+              ~4× lower latency, yet BERTScore F1 falls from L2 to L3 in 10 of 12 model–split pairs.</p>
+          </div>
+        </div>
+        <div class="finding">
+          <span class="num-badge">3</span>
+          <div>
+            <h4 class="title is-6">Harder splits, lower consensus</h4>
+            <p style="color: var(--ink-2); font-size: 0.92rem;">From Test 1 to Test 3, InternVL3-8B (L2) CIDEr drops
+              0.733 → 0.464, while BERTScore F1 varies by at most 0.0055.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="sub-title">Full results</h3>
+    <div class="tabs vn-tabs" data-tabs="results">
+      <ul>
+        <li class="is-active"><a data-tab="res-Test 1">Test 1 · Easy</a></li>
+        <li><a data-tab="res-Test 2">Test 2 · Medium</a></li>
+        <li><a data-tab="res-Test 3">Test 3 · Hard</a></li>
+      </ul>
+    </div>
+    <div id="results-tables"><!-- rendered by index.js --></div>
+    <p class="table-note"><span class="tag is-cat" style="background: var(--gold-soft);">bold</span> best per column
+      within the split (lowest for latency); underline marks the runner-up.</p>
+
+    <h3 class="sub-title">Qualitative results</h3>
+    <figure class="paper-figure framed">
+      <img src="./static/images/sample_result.webp" width="731" height="261" loading="lazy"
+           alt="Two qualitative examples comparing reference and predicted answers: welcoming ceremony in Hội An in rain, and the architecture of Long Đọi Sơn pagoda.">
+      <figcaption><b>Sample predictions.</b> Reference vs. predicted answers for two test questions.
+        <span class="todo">TODO: higher-resolution export</span></figcaption>
+    </figure>
+
+    <h3 class="sub-title">Limitations</h3>
+    <details class="discuss">
+      <summary>Discussion &amp; limitations</summary>
+      <div class="content">
+        <p>Gemini-generated QA pairs carry risks of stylistic homogeneity and hallucination, and web-sourced content
+          may partially inflate zero-shot performance through pretraining-corpus overlap — a contamination risk that
+          InfoSeek addressed with Unseen-Entity splits not yet provided here. Monolingual coverage limits
+          cross-lingual evaluation compared with SEA-VQA and CVQA.</p>
+        <p>On the societal side, the dataset supports culturally aware vision-language models and the digital
+          preservation of Vietnamese heritage for education, though LLM-generated content may encode factual errors.
+          Reliance on major publications introduces representational bias toward dominant cultural narratives,
+          partially mitigated by detailed source documentation and human verification of the full test split.</p>
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- ================= Citation ================= -->
+<section class="section alt" id="citation">
+  <div class="container is-max-desktop">
+    <div class="section-head">
+      <p class="section-kicker">Citation</p>
+      <h2 class="title is-2">BibTeX</h2>
+    </div>
+    <!-- TODO: replace with the final BibTeX entry -->
+    <div class="bibtex-box">
+      <button class="copy-btn" data-copy="bibtex-code"><i class="far fa-copy"></i> Copy</button>
+      <pre><code id="bibtex-code">@inproceedings{TODO_vnculturevqa2027,
+  title     = {VNCultureVQA: Benchmarking VQA for Vietnamese Cultural Events},
+  author    = {Phan, Van-Phuc and Pham, Minh-Tan and Le, Trung-Nghia},
+  booktitle = {TODO},
+  year      = {2027}
 }</code></pre>
+    </div>
+
+    <h3 class="sub-title">Acknowledgements</h3>
+    <div class="placeholder-box" style="min-height: 120px;">
+      <span class="icon"><i class="fas fa-quote-left"></i></span>
+      <span>Funding and acknowledgement text</span><span class="todo">TODO</span>
+    </div>
   </div>
 </section>
 
-
-<footer class="footer">
-  <div class="container">
-    <div class="content has-text-centered">
-      <a class="icon-link"
-         href="./static/videos/nerfies_paper.pdf">
-        <i class="fas fa-file-pdf"></i>
-      </a>
-      <a class="icon-link" href="https://github.com/keunhong" class="external-link" disabled>
-        <i class="fab fa-github"></i>
-      </a>
-    </div>
-    <div class="columns is-centered">
-      <div class="column is-8">
-        <div class="content">
-          <p>
-            This website is licensed under a <a rel="license"
-                                                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
-            Commons Attribution-ShareAlike 4.0 International License</a>.
-          </p>
-          <p>
-            This means you are free to borrow the <a
-              href="https://github.com/nerfies/nerfies.github.io">source code</a> of this website,
-            we just ask that you link back to this page in the footer.
-            Please remember to remove the analytics code included in the header of the website which
-            you do not want on your website.
-          </p>
-        </div>
-      </div>
-    </div>
+<!-- ================= Footer ================= -->
+<footer class="footer site-footer">
+  <div class="container is-max-desktop has-text-centered">
+    <p class="footer-brand">VNCultureVQA</p>
+    <p style="margin: 0.75rem 0 1.25rem;">
+      <!-- TODO: footer links -->
+      <a class="icon-link" href="#" title="Paper (coming soon)"><i class="fas fa-file-pdf"></i></a>
+      <a class="icon-link" href="#" title="Code (coming soon)"><i class="fab fa-github"></i></a>
+      <a class="icon-link" href="#" title="Dataset (coming soon)"><i class="fas fa-database"></i></a>
+    </p>
+    <p>
+      This website is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+      Commons Attribution-ShareAlike 4.0 International License</a>. Template adapted from
+      <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>.
+    </p>
   </div>
 </footer>
+
+<div class="lightbox" id="lightbox" aria-hidden="true"><img alt=""></div>
 
 </body>
 </html>
