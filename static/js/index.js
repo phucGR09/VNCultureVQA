@@ -10,7 +10,7 @@
   var C = {
     ink: tok('--ink'), ink2: tok('--ink-2'), muted: tok('--muted'), surface: tok('--surface'),
     red: tok('--red'), single: tok('--single'),
-    grid: '#ece6dc', axis: '#d6cec3', other: '#cfc7bd',
+    grid: '#ece6dc', axis: '#d6cec3',
     // Categorical slots (validated): one per model, fixed order
     series: [tok('--series-1'), tok('--series-2'), tok('--series-3'), tok('--series-4')],
     // Ordinal red ramp (validated): context levels L1→L3 / difficulty meta-groups
@@ -104,37 +104,6 @@
       html += '<tr><td>' + row.label + '</td>';
       row.values.forEach(function (v) { html += '<td class="num">' + fmt(v, row.fmt) + '</td>'; });
       html += '<td class="num"><strong>' + fmtTotal(row.total, row.fmt) + '</strong></td></tr>';
-    });
-    t.innerHTML = html + '</tbody>';
-  }
-
-  function renderComparisonTable() {
-    var t = $('#table-comparison');
-    if (!t) return;
-    var html = '<thead><tr><th style="text-align:left">Dataset</th><th>Language</th><th>Domain</th>' +
-      '<th>Modality</th><th>Knowledge</th><th class="num"># Images</th><th class="num"># QA</th></tr></thead><tbody>';
-    D.comparison.forEach(function (r) {
-      html += '<tr' + (r.ours ? ' class="ours"' : '') + '><td>' + r.name + '</td><td>' + r.lang + '</td><td>' +
-        r.domain + '</td><td>' + r.modality + '</td><td>' + r.knowledge + '</td><td class="num">' +
-        fmtInt(r.images) + '</td><td class="num">' + fmtInt(r.qa) + '</td></tr>';
-    });
-    t.innerHTML = html + '</tbody>';
-  }
-
-  function renderModelTable() {
-    var t = $('#table-models');
-    if (!t) return;
-    var html = '<thead><tr>';
-    D.modelConfigHeader.forEach(function (h, i) {
-      html += '<th' + (i === 0 ? ' style="text-align:left"' : '') + '>' + h + '</th>';
-    });
-    html += '</tr></thead><tbody>';
-    D.modelConfig.forEach(function (row) {
-      html += '<tr>';
-      row.forEach(function (c, i) {
-        html += i === 0 ? '<td class="model-cell">' + c + '</td>' : '<td class="center">' + c + '</td>';
-      });
-      html += '</tr>';
     });
     t.innerHTML = html + '</tbody>';
   }
@@ -243,8 +212,6 @@
   renderGallery();
   renderExamples();
   renderOverallTable();
-  renderComparisonTable();
-  renderModelTable();
   renderResultTables();
   renderTaxonomy();
 
@@ -368,16 +335,6 @@
       function (v) { return v.toFixed(1) + '%'; });
   };
 
-  builders['chart-comparison'] = function (el) {
-    var rows = D.comparison.slice().sort(function (a, b) { return b.qa - a.qa; });
-    return horizontalBar(el,
-      rows.map(function (r) { return r.name; }),
-      rows.map(function (r) { return r.qa; }),
-      rows.map(function (r) { return r.ours ? C.red : C.other; }),
-      function (v) { return v >= 1000 ? Math.round(v / 1000) + 'k' : String(v); },
-      { type: 'logarithmic', min: 1000, grid: { display: false } });
-  };
-
   function isVisible(el) { return !!(el.offsetWidth || el.offsetHeight || el.getClientRects().length); }
 
   function buildVisibleCharts() {
@@ -442,7 +399,7 @@
      ------------------------------------------------------------------ */
   if (window.renderMathInElement) {
     renderMathInElement(document.body, {
-      delimiters: [{ left: '$$', right: '$$', display: true }, { left: '\\(', right: '\\)', display: false }],
+      delimiters: [{ left: '$$', right: '$$', display: true }],
       throwOnError: false
     });
   }

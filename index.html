@@ -50,7 +50,6 @@
         <a class="navbar-item" href="#dataset">Dataset</a>
         <a class="navbar-item" href="#statistics">Statistics</a>
         <a class="navbar-item" href="#examples">Examples</a>
-        <a class="navbar-item" href="#benchmark">Benchmark</a>
         <a class="navbar-item" href="#results">Results</a>
         <a class="navbar-item" href="#citation">Citation</a>
       </div>
@@ -330,112 +329,10 @@
     <!-- Cards come from VNC_DATA.examples (static/js/data.js) -->
     <div class="example-grid" id="example-grid"></div>
   </div>
-  <div class="container is-max-desktop" style="margin-top: 3rem;">
-    <h3 class="sub-title">Comparison with existing datasets</h3>
-    <div class="table-wrap">
-      <table class="vn-table" id="table-comparison"><!-- rendered by index.js --></table>
-    </div>
-    <div class="chart-card" style="margin-top: 1.25rem;">
-      <h4>QA pairs per dataset</h4>
-      <p class="chart-sub">Log scale — VNCultureVQA is about 2.5× larger than the next-largest benchmark (CoralVQA) and 46× larger than ViVQA.</p>
-      <div class="chart-wrap short"><canvas id="chart-comparison" aria-label="Bar chart comparing QA pair counts across datasets" role="img"></canvas></div>
-    </div>
-  </div>
-</section>
-
-<!-- ================= Benchmark ================= -->
-<section class="section alt" id="benchmark">
-  <div class="container is-max-desktop">
-    <div class="section-head">
-      <p class="section-kicker">Benchmark</p>
-      <h2 class="title is-2">Knowledge-Grounded Generative VQA</h2>
-    </div>
-
-    <h3 class="sub-title">Task definition</h3>
-    <div class="content prose">
-      <p>Given an image \(I\) and its caption \(C\), a question \(Q\) and an article context \(A\), a model
-        \(\mathcal{M}\) generates a free-form Vietnamese answer \(\hat{y}\), which is evaluated against the reference
-        answer \(y\):</p>
-      $$\hat{y} = \mathcal{M}(I,\, Q,\, C,\, A)$$
-      <p>The ground-truth article is used in every context-aware level and is treated as auxiliary evidence rather
-        than an independent retrieval target. This is a deliberate scope boundary: identifying the source article from
-        the image alone is a separate problem with its own error source, and conflating the two would make it
-        impossible to tell whether an incorrect answer originates in reasoning or in retrieval.</p>
-    </div>
-
-    <h3 class="sub-title">Context levels</h3>
-    <div class="content prose">
-      <p>Baselines are organised into three levels of progressively enriched context. The input structure is identical
-        across models, so differences between levels are attributable to context and training rather than to
-        architecture.</p>
-      <ol class="level-list">
-        <li><strong>Level 1 — Image + Question.</strong> Zero-shot standard VQA without any article context: the
-          visual-only floor and the ablation anchor against which the gain from external documents is measured.
-          $$\hat{y} = \mathcal{M}(I,\, Q)$$</li>
-        <li><strong>Level 2 — Image + Caption + Article + Question.</strong> Article-grounded and zero-shot: the
-          full-context ceiling without domain-specific fine-tuning, using the prompt template carried forward to Level 3.
-          $$\hat{y} = \mathcal{M}(I,\, Q,\, C,\, A)$$</li>
-        <li><strong>Level 3 — Fine-tuned.</strong> Models trained on the full training split with the Level 2 prompt,
-          establishing the ceiling attainable with domain adaptation.
-          $$\hat{y} = \mathcal{M}_{\theta^{*}}(I,\, Q,\, C,\, A_{\text{top-}k})$$</li>
-      </ol>
-    </div>
-
-    <h3 class="sub-title">Baseline models</h3>
-    <div class="table-wrap">
-      <table class="vn-table" id="table-models"><!-- rendered by index.js --></table>
-    </div>
-    <p class="table-note">InternVL3-8B and Qwen2.5-VL-7B act as dense anchors; Vintern-1B-v3.5 is a Vietnamese-native
-      model; Gemma3-VL-12B-it probes long-context behaviour. All models generate at most 32 new tokens.</p>
-
-    <h3 class="sub-title">Training</h3>
-    <div class="content prose">
-      <p>The baseline follows the Wiki-LLaVA recipe: a frozen visual encoder, a trainable MLP projector, and a language
-        model that receives article text in its prompt as ordinary tokens.</p>
-      <p><strong>Phase 1 — MLP pretraining.</strong> A two-layer projector maps visual features into the LLM embedding
-        space. Both the visual encoder and the LLM stay frozen, and the projector is supervised with an image-to-caption
-        objective:</p>
-      $$\mathbf{z} = W_2\,\mathrm{GELU}\big(\mathrm{LN}(W_1\,\mathbf{v})\big), \qquad \mathbf{v} \in \mathbb{R}^{D_v},\;\; \mathbf{z} \in \mathbb{R}^{D_{\text{llm}}}$$
-      <p><strong>Phase 2 — Supervised fine-tuning.</strong> multilingual-E5 ranks the passages \(p\) of the
-        ground-truth article by cosine similarity to the question and keeps the top-\(k\):</p>
-      $$A_{\text{top-}k} = \mathop{\text{top-}k}\limits_{p \in A}\; \cos\!\big(E(Q),\, E(p)\big)$$
-      <p>The LLM is adapted with QLoRA on the attention projections while the projector keeps training, using an
-        autoregressive cross-entropy loss on answer tokens only (visual and prompt tokens are masked). Inference uses
-        greedy decoding for all models and levels.</p>
-      $$\mathcal{L} = -\sum_{t \in \text{answer}} \log p_{\theta}\big(y_t \mid y_{&lt;t},\, I,\, C,\, A_{\text{top-}k},\, Q\big)$$
-    </div>
-
-    <h3 class="sub-title">Evaluation metrics</h3>
-    <p class="content" style="color: var(--ink-2);">Vietnamese is morphologically rich and answers are free-form, so
-      strict lexical matching alone is inadequate; semantic and lexical metrics are combined.</p>
-    <div class="table-wrap">
-      <table class="vn-table metric-table">
-        <thead>
-          <tr><th style="text-align:left">Metric</th><th>Family</th><th>Role</th><th style="text-align:left">Description</th></tr>
-        </thead>
-        <tbody>
-          <tr><td><strong>BERTScore</strong> (P / R / F1)</td><td class="center">Semantic</td><td class="center">Primary (F1)</td>
-            <td class="wrap">Contextual similarity with <code>xlm-roberta-base</code>, no baseline rescaling; captures paraphrasing.</td></tr>
-          <tr><td><strong>CIDEr</strong></td><td class="center">Consensus</td><td class="center">Primary</td>
-            <td class="wrap">TF-IDF weighted <em>n</em>-gram consensus with the reference answer.</td></tr>
-          <tr><td><strong>Exact Match</strong></td><td class="center">Lexical</td><td class="center">Secondary</td>
-            <td class="wrap">Exact string agreement with the reference answer.</td></tr>
-          <tr><td><strong>Token F1</strong></td><td class="center">Lexical</td><td class="center">Secondary</td>
-            <td class="wrap">Token-overlap F1 between prediction and reference.</td></tr>
-          <tr><td><strong>BLEU-4</strong></td><td class="center">Lexical</td><td class="center">Secondary</td>
-            <td class="wrap"><em>n</em>-gram precision up to 4-grams, for comparability with prior Vietnamese VQA.</td></tr>
-          <tr><td><strong>METEOR</strong></td><td class="center">Lexical</td><td class="center">Secondary</td>
-            <td class="wrap">Alignment-based matching with stemming and synonymy.</td></tr>
-          <tr><td><strong>Latency</strong></td><td class="center">Efficiency</td><td class="center">—</td>
-            <td class="wrap">Mean wall-clock time per generated answer (ms).</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
 </section>
 
 <!-- ================= Results ================= -->
-<section class="section" id="results">
+<section class="section alt" id="results">
   <div class="container is-max-desktop">
     <div class="section-head">
       <p class="section-kicker">Results</p>
@@ -443,8 +340,12 @@
       <p class="lead">Four open-source VLMs across three context levels and three difficulty-stratified test splits.</p>
     </div>
 
-    <p class="content" style="color: var(--ink-2); text-align: center;">Highlighted cells mark the best value per
-      column within each split (lowest for latency); underlined cells mark the runner-up.</p>
+    <p class="content" style="color: var(--ink-2); text-align: center;">
+      <span class="lvl-pill L1">L1</span> image + question &nbsp;·&nbsp;
+      <span class="lvl-pill L2">L2</span> + caption + article (zero-shot) &nbsp;·&nbsp;
+      <span class="lvl-pill L3">L3</span> fine-tuned<br>
+      Highlighted cells mark the best value per column within each split (lowest for latency); underlined cells mark
+      the runner-up.</p>
     <div class="tabs vn-tabs" data-tabs="results">
       <ul>
         <li class="is-active"><a data-tab="res-Test 1">Test 1 · Easy</a></li>
@@ -471,7 +372,7 @@
 </section>
 
 <!-- ================= Citation ================= -->
-<section class="section alt" id="citation">
+<section class="section" id="citation">
   <div class="container is-max-desktop">
     <div class="section-head">
       <p class="section-kicker">Citation</p>
@@ -486,12 +387,6 @@
   booktitle = {TODO},
   year      = {2027}
 }</code></pre>
-    </div>
-
-    <h3 class="sub-title">Acknowledgements</h3>
-    <div class="placeholder-box" style="min-height: 120px;">
-      <span class="icon"><i class="fas fa-quote-left"></i></span>
-      <span>Funding and acknowledgement text</span><span class="todo">TODO</span>
     </div>
   </div>
 </section>

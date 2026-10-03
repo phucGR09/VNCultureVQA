@@ -97,25 +97,6 @@ window.VNC_DATA = {
   ],
   levelGroups: ["Visual-Only Perception", "Multimodal Integration", "High-level Reasoning"],
 
-  // Table: Comparison with existing datasets (tab:comparison)
-  comparison: [
-    { name: "ViVQA",       lang: "Vietnamese", domain: "Generic",    modality: "Isolated Image",   knowledge: "Visual Recognition", images: 10328,  qa: 15000 },
-    { name: "OK-VQA",      lang: "English",    domain: "Generic",    modality: "Isolated Image",   knowledge: "Open Knowledge",     images: 14031,  qa: 14055 },
-    { name: "ViMed-PET",   lang: "Vietnamese", domain: "Medical",    modality: "3D PET/CT",        knowledge: "Clinical Reports",   images: 2757,   qa: 8271 },
-    { name: "CoralVQA",    lang: "English",    domain: "Marine Bio", modality: "Isolated Image",   knowledge: "Taxonomy",           images: 12805,  qa: 277653 },
-    { name: "MMDocRAG",    lang: "English",    domain: "Industrial", modality: "Interleaved Doc",  knowledge: "Document-Grounded",  images: 222,    qa: 4055 },
-    { name: "VNCultureVQA", lang: "Vietnamese", domain: "Culture",   modality: "Interleaved Art.", knowledge: "Unified Knowledge",  images: 107947, qa: 691830, ours: true }
-  ],
-
-  // Table: Model configuration (sec/baseline.tex, tab:model_config)
-  modelConfigHeader: ["Model", "Visual Encoder", "Img Size", "Patch", "Vis Dim", "Tokens/Tile", "LLM Backbone", "LLM Dim", "Context"],
-  modelConfig: [
-    ["Qwen2.5-VL-7B-Instruct", "Qwen2-ViT",      "448", "14", "1280", "256", "Qwen2.5-7B",   "3584", "32,768"],
-    ["InternVL3-8B",           "InternViT-300M", "448", "14", "1024", "256", "Qwen2.5-7B",   "3584", "8,192"],
-    ["Gemma3-VL-12B-it",       "SigLIP-400M",    "896", "14", "1152", "256", "Gemma3-12B",   "3072", "131,072"],
-    ["Vintern-1B-v3.5",        "InternViT-300M", "448", "14", "1024", "256", "Qwen2.5-0.5B", "896",  "1,700"]
-  ],
-
   // Results (sec/experiments.tex, tab:results_test1..3)
   // Column order: EM, Token F1, BLEU, METEOR, BERT-P, BERT-R, BERT-F1, CIDEr, Latency (ms)
   metrics: [

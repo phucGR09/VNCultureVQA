@@ -120,14 +120,6 @@ a:hover { color: var(--red-dark); }
   vertical-align: middle; line-height: 1.5;
 }
 .publication-links .button .todo { color: var(--ink); margin-left: 0.4rem; }
-.placeholder-box {
-  border: 2px dashed var(--line-strong); border-radius: var(--radius); background: repeating-linear-gradient(
-    45deg, rgba(31, 26, 23, 0.025) 0 10px, transparent 10px 20px);
-  color: var(--muted); display: flex; flex-direction: column; align-items: center; justify-content: center;
-  text-align: center; gap: 0.4rem; padding: 1.5rem; min-height: 220px; font-family: var(--font-head);
-}
-.placeholder-box .icon { font-size: 1.6rem; color: var(--gold); }
-
 /* ---------- Hero gallery (mosaic) ---------- */
 .mosaic-band { padding: 0 1.5rem 2.5rem; }
 .mosaic {
@@ -307,11 +299,6 @@ figure.paper-figure figcaption b, .chart-caption b { color: var(--ink-2); font-f
 .prose p { color: var(--ink-2); }
 .prose .katex-display { margin: 0.9rem 0 1.2rem; overflow-x: auto; overflow-y: hidden; padding: 0.2rem 0; }
 .prose .katex { font-size: 1.08em; color: var(--ink); }
-.prose ol.level-list { margin-left: 1.25rem; }
-.prose ol.level-list li { margin-bottom: 0.9rem; padding-left: 0.25rem; }
-.prose ol.level-list li::marker { font-family: var(--font-head); font-weight: 700; color: var(--red); }
-.prose ol.level-list .katex-display { margin: 0.5rem 0 0; text-align: left; }
-.prose ol.level-list .katex-display > .katex { text-align: left; }
 
 /* ---------- Tables ---------- */
 .table-wrap {
@@ -333,8 +320,6 @@ table.vn-table thead th {
 table.vn-table thead tr.group-row th { border-bottom: 1px solid var(--line); color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; font-size: 0.72rem; }
 table.vn-table td.num, table.vn-table th.num { text-align: right; }
 table.vn-table td.center { text-align: center; }
-table.vn-table td.wrap { white-space: normal; min-width: 260px; color: var(--ink-2); }
-table.vn-table code { font-size: 0.82rem; background: rgba(31, 26, 23, 0.06); color: var(--ink); }
 table.vn-table tbody tr:last-child td { border-bottom: none; }
 table.vn-table tbody tr:hover td { background: rgba(200, 150, 30, 0.06); }
 table.vn-table tr.ours td { background: var(--red-soft); font-weight: 700; color: var(--ink); }
