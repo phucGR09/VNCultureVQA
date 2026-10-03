@@ -2,6 +2,52 @@
 // Tables and charts are rendered from this object so values live in one place.
 window.VNC_DATA = {
 
+  // Hero mosaic (30 tiles). Real photos are cropped from the paper figures; the
+  // remaining slots load static/images/gallery/NN.webp and show a placeholder tile
+  // until that file exists. TODO: add dataset photos as gallery/01.webp … 30.webp.
+  gallery: (function () {
+    var real = {
+      0:  { src: "./static/images/samples/songco.webp",     alt: "Sán Chỉ artists performing Sóong Cọ singing" },
+      4:  { src: "./static/images/samples/phuocbien.webp",  alt: "Khmer Phước Biển festival in Sóc Trăng" },
+      8:  { src: "./static/images/samples/quanho.webp",     alt: "Quan họ singing in a traditional house in Hà Nội" },
+      12: { src: "./static/images/samples/thuongtieu.webp", alt: "Thượng Tiêu ceremonial pole at the start of spring" },
+      16: { src: "./static/images/samples/quangtri.webp",   alt: "Visitors at the Quảng Trị Citadel" },
+      20: { src: "./static/images/samples/gate.webp",       alt: "Traditional gate of a historic relic" },
+      24: { src: "./static/images/samples/longdoison.webp", alt: "Long Đọi Sơn pagoda" },
+      28: { src: "./static/images/samples/hoian.webp",      alt: "Welcoming ceremony in Hội An" }
+    };
+    var out = [];
+    for (var i = 0; i < 30; i++) {
+      out.push(real[i] || { src: "./static/images/gallery/" + String(i + 1).padStart(2, "0") + ".webp", alt: "" });
+    }
+    return out;
+  })(),
+
+  // Dataset samples (3 × 2 grid). Q/A transcribed from the paper figures.
+  // TODO: category / level tags; higher-resolution photos for the last two.
+  examples: [
+    { img: "./static/images/samples/songco.webp", alt: "Sán Chỉ artists performing Sóong Cọ singing on stage",
+      q: "Những người đang biểu diễn trong bức ảnh là ai?",
+      a: "Những nghệ sĩ người Sán Chỉ đang biểu diễn điệu hát Sóong Cọ." },
+    { img: "./static/images/samples/phuocbien.webp", alt: "Khmer community gathered at a pagoda for the Phước Biển festival",
+      q: "Ý nghĩa của lễ hội Phước Biển đối với đồng bào Khmer Sóc Trăng là gì?",
+      a: "Lễ hội nhằm tạ ơn biển cả đã cho con người nguồn hải sản quý giá và cầu nguyện cho người đi biển được bình yên." },
+    { img: "./static/images/samples/thuongtieu.webp", alt: "Thượng Tiêu ceremonial pole raised in front of an imperial building",
+      q: "Cột nêu trong hình có ý nghĩa biểu tượng gì?",
+      a: "Cột nêu là biểu tượng cho nghi lễ Thượng Tiêu – dấu mốc mở đầu mùa xuân, mang ý nghĩa cầu an, xua đuổi điều không may và chúc phúc cho năm mới." },
+    { img: "./static/images/samples/quanho.webp", alt: "Quan họ singers seated in a traditional wooden house",
+      q: "Bối cảnh kiến trúc trong ảnh gợi nhớ đến không gian văn hóa nào của Việt Nam?",
+      a: "Không gian kiến trúc cổ kính với cột gỗ chạm trổ, tranh treo và bàn thờ, thể hiện không gian văn hóa Quan họ truyền thống." },
+    { img: "./static/images/samples/hoian.webp", alt: "Officials greeting a visitor under umbrellas in Hội An",
+      q: "Thời tiết trong ảnh có gì đặc biệt và ảnh hưởng đến buổi lễ đón khách như thế nào?",
+      a: "Thời tiết mưa liên tục, nhưng chính quyền Hội An vẫn tổ chức đón tiếp nồng hậu, khiến du khách hào hứng và thích thú.",
+      pred: "Thời tiết liên tục đổ mưa, nhưng chính quyền TP Hội An vẫn tổ chức đón tiếp nồng hậu." },
+    { img: "./static/images/samples/longdoison.webp", alt: "Red-tiled roof and wooden columns of Long Đọi Sơn pagoda",
+      q: "Kiến trúc đặc trưng nào của Chùa Long Đọi Sơn được thể hiện rõ nhất qua hình ảnh?",
+      a: "Kiến trúc mái ngói đỏ, cột gỗ vững chãi và bậc thềm rộng.",
+      pred: "Đền thờ được xây dựng theo kiến trúc truyền thống, với mái ngói đỏ rực rỡ và cột gỗ lớn." }
+  ],
+
   // Table: Overall statistics (sec/dataset_statistics.tex, tab:overall_stats)
   splits: ["Train", "Test 1", "Test 2", "Test 3"],
   overall: [
@@ -84,7 +130,6 @@ window.VNC_DATA = {
     { key: "lat",    label: "Latency (ms)", group: "Latency", lowerIsBetter: true }
   ],
   models: ["Vintern-1B-v3.5", "InternVL3-8B", "Gemma3-VL-12B-it", "Qwen2.5-VL-7B-Instruct"],
-  contextLevels: ["L1", "L2", "L3"],
   results: {
     "Test 1": {
       "Vintern-1B-v3.5":        [[0.0007, 0.2714, 0.1109, 0.2372, 0.8690, 0.8606, 0.8644, 0.3988, 3864.9],

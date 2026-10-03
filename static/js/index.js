@@ -205,6 +205,43 @@
     host.innerHTML = html;
   }
 
+  function escapeHtml(t) {
+    return String(t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; });
+  }
+
+  // Hero mosaic: tiles whose file is missing fall back to a placeholder
+  function renderGallery() {
+    var host = $('#hero-mosaic');
+    if (!host || !D.gallery) return;
+    host.innerHTML = D.gallery.map(function (g) {
+      return '<div class="tile"><img src="' + g.src + '" alt="' + escapeHtml(g.alt) + '" title="' + escapeHtml(g.alt) +
+        '" loading="lazy" decoding="async"></div>';
+    }).join('');
+    $$('img', host).forEach(function (img) {
+      img.addEventListener('error', function () {
+        var tile = img.parentElement;
+        tile.classList.add('is-empty');
+        tile.innerHTML = '<i class="far fa-image" aria-hidden="true"></i>';
+      });
+    });
+  }
+
+  function renderExamples() {
+    var host = $('#example-grid');
+    if (!host || !D.examples) return;
+    host.innerHTML = D.examples.map(function (ex) {
+      return '<article class="example-card">' +
+        '<div class="photo"><img src="' + ex.img + '" alt="' + escapeHtml(ex.alt) + '" loading="lazy"></div>' +
+        '<div class="qa">' +
+        '<p class="q"><span class="lbl">Q</span>' + escapeHtml(ex.q) + '</p>' +
+        '<p><span class="lbl">A</span>' + escapeHtml(ex.a) + '</p>' +
+        (ex.pred ? '<p class="pred"><span class="lbl">Model prediction:</span>' + escapeHtml(ex.pred) + '</p>' : '') +
+        '</div></article>';
+    }).join('');
+  }
+
+  renderGallery();
+  renderExamples();
   renderOverallTable();
   renderComparisonTable();
   renderModelTable();
@@ -267,38 +304,6 @@
 
   var gridX = function (show) { return { display: show, color: C.grid, drawTicks: false }; };
   var bar = { borderRadius: 4, borderSkipped: 'start', borderWidth: 0 };
-
-  builders['chart-levels'] = function (el) {
-    renderLegend('legend-levels', D.levelGroups.map(function (g, gi) { return { label: g, color: C.ord[gi] }; }));
-    return new Chart(el, {
-      type: 'bar',
-      data: {
-        labels: D.levels.map(function (l) { return l.id; }),
-        datasets: D.levelGroups.map(function (g, gi) {
-          return Object.assign({
-            label: g,
-            data: D.levels.map(function (l) { return l.group === gi ? l.pct : null; }),
-            backgroundColor: C.ord[gi]
-          }, bar);
-        })
-      },
-      options: {
-        datasets: { bar: { skipNull: true, categoryPercentage: 0.7, barPercentage: 0.95 } },
-        scales: {
-          x: { grid: { display: false }, border: { color: C.axis } },
-          y: { beginAtZero: true, grid: gridX(true), border: { display: false }, ticks: { callback: function (v) { return v + '%'; } } }
-        },
-        plugins: {
-          tooltip: {
-            callbacks: {
-              title: function (items) { var l = D.levels[items[0].dataIndex]; return l.id + ' · ' + l.name; },
-              label: function (item) { return ' ' + item.dataset.label + ': ' + item.parsed.y.toFixed(1) + '%'; }
-            }
-          }
-        }
-      }
-    });
-  };
 
   builders['chart-lengths'] = function (el) {
     var q = D.overall[4].values, a = D.overall[5].values;
@@ -373,99 +378,6 @@
       { type: 'logarithmic', min: 1000, grid: { display: false } });
   };
 
-  // Results: grouped bars, x = model, series = context level
-  var resultState = { split: 'Test 1', metric: 'cider' };
-  function metricIndex(key) { for (var i = 0; i < D.metrics.length; i++) if (D.metrics[i].key === key) return i; return 0; }
-  function metricName(key) { var m = D.metrics[metricIndex(key)]; return m.long || m.label; }
-
-  function resultDatasets() {
-    var mi = metricIndex(resultState.metric);
-    return D.contextLevels.map(function (lvl, li) {
-      return Object.assign({
-        label: lvl,
-        data: D.models.map(function (m) { return D.results[resultState.split][m][li][mi]; }),
-        backgroundColor: C.ord[li]
-      }, bar);
-    });
-  }
-
-  function resultLabels() {
-    var m = D.metrics[metricIndex(resultState.metric)];
-    $('#results-chart-title').textContent = metricName(resultState.metric) + ' by model and context level — ' + resultState.split;
-    $('#results-chart-sub').textContent = m.lowerIsBetter ? 'Lower is better (mean ms per answer).' :
-      (resultState.metric === 'bf1' ? 'Higher is better. Semantic similarity sits near its ceiling at every level.' : 'Higher is better.');
-  }
-
-  builders['chart-results'] = function (el) {
-    resultLabels();
-    renderLegend('legend-results', D.contextLevels.map(function (l, li) {
-      return { label: l + ' · ' + ['Image + Question', '+ Caption + Article', 'Fine-tuned'][li], color: C.ord[li] };
-    }));
-    return new Chart(el, {
-      type: 'bar',
-      data: { labels: D.models, datasets: resultDatasets() },
-      options: {
-        datasets: { bar: { categoryPercentage: 0.72, barPercentage: 0.92 } },
-        scales: {
-          x: { grid: { display: false }, border: { color: C.axis }, ticks: { color: C.ink2 } },
-          y: { beginAtZero: true, grid: gridX(true), border: { display: false } }
-        },
-        plugins: {
-          tooltip: {
-            callbacks: {
-              label: function (i) {
-                var isLat = resultState.metric === 'lat';
-                return ' ' + i.dataset.label + ': ' + (isLat ? fmtInt(i.raw) + ' ms' : i.raw.toFixed(4));
-              }
-            }
-          }
-        }
-      }
-    });
-  };
-
-  function updateResults() {
-    var ch = charts['chart-results'];
-    if (!ch) return;
-    var ds = resultDatasets();
-    ch.data.datasets.forEach(function (d, i) { d.data = ds[i].data; });
-    resultLabels();
-    ch.update();
-  }
-
-  // Trend: CIDEr across splits, one line per model (fixed model colours)
-  var trendLevel = 1;
-  function trendData() {
-    var ci = metricIndex('cider');
-    return D.models.map(function (m, mi) {
-      return {
-        label: m,
-        data: D.splits.slice(1).map(function (s) { return D.results[s][m][trendLevel][ci]; }),
-        borderColor: C.series[mi], backgroundColor: C.series[mi],
-        borderWidth: 2, pointRadius: 4, pointHoverRadius: 6,
-        pointBorderColor: C.surface, pointBorderWidth: 2, tension: 0
-      };
-    });
-  }
-
-  builders['chart-trend'] = function (el) {
-    renderLegend('legend-trend', D.models.map(function (m, mi) { return { label: m, color: C.series[mi] }; }), true);
-    return new Chart(el, {
-      type: 'line',
-      data: { labels: D.splits.slice(1), datasets: trendData() },
-      options: {
-        interaction: { mode: 'index', intersect: false },
-        scales: {
-          x: { grid: { display: false }, border: { color: C.axis }, ticks: { color: C.ink2 } },
-          y: { beginAtZero: true, grid: gridX(true), border: { display: false }, title: { display: true, text: 'CIDEr' } }
-        },
-        plugins: {
-          tooltip: { callbacks: { label: function (i) { return ' ' + i.dataset.label + ': ' + i.raw.toFixed(4); } } }
-        }
-      }
-    });
-  };
-
   function isVisible(el) { return !!(el.offsetWidth || el.offsetHeight || el.getClientRects().length); }
 
   function buildVisibleCharts() {
@@ -523,41 +435,14 @@
   segmented($('.segmented[data-wc="split"]'), function (v) { wc.split = v; updateWordcloud(); });
   segmented($('.segmented[data-wc="field"]'), function (v) { wc.field = v; updateWordcloud(); });
 
-  segmented($('#ctl-split'), function (v) { resultState.split = v; updateResults(); });
-  segmented($('#ctl-metric'), function (v) { resultState.metric = v; updateResults(); });
-  segmented($('#ctl-trend-level'), function (v) {
-    trendLevel = +v;
-    var ch = charts['chart-trend'];
-    if (!ch) return;
-    var ds = trendData();
-    ch.data.datasets.forEach(function (d, i) { d.data = ds[i].data; });
-    ch.update();
-  });
-
   buildVisibleCharts();
-
-  /* ------------------------------------------------------------------
-     Carousel
-     ------------------------------------------------------------------ */
-  if (window.bulmaCarousel && $('#example-carousel')) {
-    bulmaCarousel.attach('#example-carousel', {
-      slidesToScroll: 1,
-      slidesToShow: 3,
-      loop: true,
-      infinite: false,
-      pagination: true,
-      navigation: true,
-      breakpoints: [{ changePoint: 480, slidesToShow: 1, slidesToScroll: 1 },
-                    { changePoint: 900, slidesToShow: 2, slidesToScroll: 1 }]
-    });
-  }
 
   /* ------------------------------------------------------------------
      KaTeX
      ------------------------------------------------------------------ */
   if (window.renderMathInElement) {
     renderMathInElement(document.body, {
-      delimiters: [{ left: '$$', right: '$$', display: true }],
+      delimiters: [{ left: '$$', right: '$$', display: true }, { left: '\\(', right: '\\)', display: false }],
       throwOnError: false
     });
   }
@@ -568,7 +453,7 @@
   var lightbox = $('#lightbox');
   var lightImg = lightbox && $('img', lightbox);
   document.addEventListener('click', function (e) {
-    var img = e.target.closest && e.target.closest('.paper-figure img, .example-card img, .wc-frame img');
+    var img = e.target.closest && e.target.closest('.paper-figure img, .example-card img, .wc-frame img, .mosaic img');
     if (img && lightbox) {
       lightImg.src = img.currentSrc || img.src;
       lightImg.alt = img.alt;
