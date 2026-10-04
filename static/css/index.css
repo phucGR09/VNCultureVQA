@@ -260,8 +260,6 @@ figure.paper-figure figcaption b, .chart-caption b { color: var(--ink-2); font-f
   display: inline-block; min-width: 1.4rem; font-family: var(--font-head); font-weight: 700; color: var(--red);
 }
 .example-card .qa .q { color: var(--ink); font-weight: 500; }
-.example-card .qa .pred { font-size: 0.85rem; color: var(--muted); border-top: 1px dashed var(--line-strong); padding-top: 0.45rem; }
-.example-card .qa .pred .lbl { color: var(--muted); min-width: 0; margin-right: 0.3rem; }
 
 /* ---------- Prose & formulas ---------- */
 .prose { color: var(--ink-2); }

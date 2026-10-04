@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description"
-        content="VNCultureVQA: a large-scale benchmark for knowledge-grounded Visual Question Answering on Vietnamese cultural events — 107,947 image–article pairs and 691,830 QA pairs across six cognitive levels.">
-  <meta name="keywords" content="VNCultureVQA, Vietnamese VQA, cultural VQA, knowledge-grounded VQA, multimodal benchmark, WACV 2027">
+    content="VNCultureVQA: a large-scale benchmark for knowledge-grounded Visual Question Answering on Vietnamese cultural events — 107,947 image–article pairs and 691,830 QA pairs across six cognitive levels.">
+  <meta name="keywords"
+    content="VNCultureVQA, Vietnamese VQA, cultural VQA, knowledge-grounded VQA, multimodal benchmark, WACV 2027">
   <title>VNCultureVQA: Benchmarking VQA for Vietnamese Cultural Events</title>
 
   <!-- TODO: Open Graph / Twitter card image + URL once the page is deployed -->
@@ -15,8 +17,9 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Noto+Sans:ital,wght@0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;700&display=swap"
-        rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Noto+Sans:ital,wght@0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;700&display=swap"
+    rel="stylesheet">
 
   <link rel="stylesheet" href="./static/css/bulma.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
@@ -31,336 +34,367 @@
   <script defer src="./static/js/data.js"></script>
   <script defer src="./static/js/index.js"></script>
 </head>
+
 <body>
 
-<!-- ================= Navbar ================= -->
-<nav class="navbar site-nav" role="navigation" aria-label="main navigation">
-  <div class="container is-max-widescreen">
-    <div class="navbar-brand">
-      <a class="navbar-item" href="#top">VNCultureVQA</a>
-      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="nav-menu">
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
-      </a>
-    </div>
-    <div class="navbar-menu" id="nav-menu">
-      <div class="navbar-end">
-        <a class="navbar-item" href="#overview">Overview</a>
-        <a class="navbar-item" href="#dataset">Dataset</a>
-        <a class="navbar-item" href="#statistics">Statistics</a>
-        <a class="navbar-item" href="#examples">Examples</a>
-        <a class="navbar-item" href="#results">Results</a>
-        <a class="navbar-item" href="#citation">Citation</a>
-      </div>
-    </div>
-  </div>
-</nav>
-
-<!-- ================= Hero ================= -->
-<section class="hero site-hero" id="top">
-  <div class="hero-body">
-    <div class="container is-max-desktop has-text-centered">
-      <h1 class="title is-1 publication-title">
-        <span class="brand-name">VNCultureVQA</span>
-        Benchmarking VQA for Vietnamese Cultural Events
-      </h1>
-
-      <div class="is-size-5 publication-authors">
-        <!-- TODO: author homepage links -->
-        <span class="author-block"><a href="#">Van-Phuc Phan</a><sup>1,2†</sup></span>
-        <span class="author-block"><a href="#">Minh-Tan Pham</a><sup>1,2†</sup></span>
-        <span class="author-block"><a href="#">Trung-Nghia Le</a><sup>1,2‡</sup></span>
-      </div>
-      <div class="affiliations publication-authors">
-        <span class="author-block"><sup>1</sup>University of Science, Ho Chi Minh City, Vietnam</span>
-        <span class="author-block"><sup>2</sup>Vietnam National University, Ho Chi Minh City, Vietnam</span>
-      </div>
-      <p class="contrib-note"><sup>†</sup>Equal contribution &nbsp;·&nbsp; <sup>‡</sup>Corresponding author</p>
-
-      <!-- TODO: replace every href="#" below with the real links -->
-      <div class="publication-links">
-        <a href="#" class="button is-normal" title="Link coming soon">
-          <span class="icon"><i class="fas fa-file-pdf"></i></span><span>Paper</span><span class="todo">TODO</span>
-        </a>
-        <a href="#" class="button is-normal" title="Link coming soon">
-          <span class="icon"><i class="ai ai-arxiv"></i></span><span>arXiv</span><span class="todo">TODO</span>
-        </a>
-        <a href="#" class="button is-normal" title="Link coming soon">
-          <span class="icon"><i class="fab fa-github"></i></span><span>Code</span><span class="todo">TODO</span>
-        </a>
-        <a href="#" class="button is-normal" title="Link coming soon">
-          <span class="icon"><i class="fas fa-database"></i></span><span>Dataset</span><span class="todo">TODO</span>
-        </a>
-        <a href="#" class="button is-normal" title="Link coming soon">
-          <span class="icon" aria-hidden="true">🤗</span><span>Hugging Face</span><span class="todo">TODO</span>
+  <!-- ================= Navbar ================= -->
+  <nav class="navbar site-nav" role="navigation" aria-label="main navigation">
+    <div class="container is-max-widescreen">
+      <div class="navbar-brand">
+        <a class="navbar-item" href="#top">VNCultureVQA</a>
+        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="nav-menu">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
         </a>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- ================= Hero gallery ================= -->
-<section class="mosaic-band">
-  <div class="container is-max-desktop">
-    <!-- Tiles come from VNC_DATA.gallery (static/js/data.js) -->
-    <div class="mosaic" id="hero-mosaic" aria-label="Sample images from VNCultureVQA"></div>
-    <p class="mosaic-caption">Representative images from <b>VNCultureVQA</b> — festivals, traditional arts, heritage
-      sites and community life, each linked to its source article.</p>
-  </div>
-</section>
-
-<!-- ================= Stat cards ================= -->
-<section class="stats-band">
-  <div class="container is-max-desktop">
-    <div class="stat-grid">
-      <div class="stat-card"><div class="stat-value" data-count="28655">28,655</div><div class="stat-label">cultural articles</div></div>
-      <div class="stat-card"><div class="stat-value" data-count="107947">107,947</div><div class="stat-label">image–article pairs</div></div>
-      <div class="stat-card"><div class="stat-value" data-count="691830">691,830</div><div class="stat-label">QA pairs</div></div>
-      <div class="stat-card"><div class="stat-value" data-count="6">6</div><div class="stat-label">cognitive levels</div></div>
-      <div class="stat-card"><div class="stat-value" data-count="8">8</div><div class="stat-label">Vietnamese news outlets</div></div>
-    </div>
-  </div>
-</section>
-
-<!-- ================= Overview: Abstract ================= -->
-<section class="section alt" id="overview">
-  <div class="container is-max-desktop">
-    <div class="section-head">
-      <p class="section-kicker">Overview</p>
-      <h2 class="title is-2">Abstract</h2>
-    </div>
-    <div class="columns is-centered">
-      <div class="column is-11">
-        <div class="content has-text-justified">
-          <p>
-            Visual Question Answering (VQA) in low-resource languages remains largely disconnected from the cultural
-            and contextual knowledge required to interpret real-world imagery. Existing Vietnamese VQA benchmarks
-            primarily treat images as isolated inputs, limiting evaluation to visual recognition rather than
-            knowledge-grounded multimodal reasoning. We introduce <span class="brand-name">VNCultureVQA</span>, a
-            large-scale benchmark for Vietnamese cultural understanding that jointly grounds images and questions in
-            real-world cultural articles, linking each image to its source article, human-authored caption, and
-            contextual knowledge. VNCultureVQA contains <strong>107,947 image–article pairs</strong> and
-            <strong>691,830 question–answer pairs</strong> spanning <strong>six cognitive levels</strong>, from visual
-            recognition to global contextual synthesis.
-          </p>
-          <p>
-            The benchmark supports knowledge-grounded generative VQA under progressively enriched contextual settings,
-            enabling evaluation of visual understanding and culturally grounded multimodal reasoning. We further
-            establish three progressively enriched evaluation settings, ranging from image-only VQA to article-grounded
-            VQA and supervised domain adaptation. Experiments with representative Vietnamese and multilingual
-            vision-language models show consistent gains from contextual grounding, while consensus and lexical scores
-            degrade steadily as reasoning demands increase and supervised domain adaptation yields uneven improvements,
-            revealing persistent limitations in current multimodal models.
-          </p>
+      <div class="navbar-menu" id="nav-menu">
+        <div class="navbar-end">
+          <a class="navbar-item" href="#overview">Overview</a>
+          <a class="navbar-item" href="#dataset">Dataset</a>
+          <a class="navbar-item" href="#statistics">Statistics</a>
+          <a class="navbar-item" href="#examples">Examples</a>
+          <a class="navbar-item" href="#results">Results</a>
+          <a class="navbar-item" href="#citation">Citation</a>
         </div>
       </div>
     </div>
+  </nav>
 
-  </div>
-</section>
+  <!-- ================= Hero ================= -->
+  <section class="hero site-hero" id="top">
+    <div class="hero-body">
+      <div class="container is-max-desktop has-text-centered">
+        <h1 class="title is-1 publication-title">
+          <span class="brand-name">VNCultureVQA</span>
+          Benchmarking VQA for Vietnamese Cultural Events
+        </h1>
 
-<!-- ================= Dataset construction ================= -->
-<section class="section" id="dataset">
-  <div class="container is-max-desktop">
-    <div class="section-head">
-      <p class="section-kicker">Dataset</p>
-      <h2 class="title is-2">Construction Pipeline</h2>
-      <p class="lead">Each article is modelled as a <em>unified multimodal knowledge source</em>: full body text,
-        embedded images and human-authored captions are kept together, so every question is grounded in the
-        narrative its image came from.</p>
-    </div>
-
-    <figure class="paper-figure framed">
-      <img src="./static/images/pipeline.webp" width="1053" height="575" loading="lazy"
-           alt="Five-stage pipeline: web crawl, caption generation with Qwen3-VL-8B, question generation and answer generation with Gemini 3 Pro, and verification with Llama 3 8B.">
-      <figcaption><b>Multi-stage construction pipeline.</b> Articles crawled from eight Vietnamese news platforms are
-        captioned with Qwen3-VL-8B, turned into questions and article-grounded answers with Gemini 3 Pro, and
-        verified against the source article with Llama 3 8B.</figcaption>
-    </figure>
-
-    <!-- Taxonomy -->
-    <h3 class="sub-title" id="taxonomy">Six-level cognitive taxonomy</h3>
-    <p class="content" style="color: var(--ink-2);">
-      Questions are organised into three meta-groups. Purely visual questions are deliberately capped at 8.2% to
-      mitigate visual shortcuts and language priors; <strong>92.0%</strong> of questions require multimodal
-      integration or higher-level reasoning.
-    </p>
-    <div class="columns" id="taxonomy-cards"><!-- rendered by index.js --></div>
-    <div class="content prose">
-      <p>Visual-only questions are first detected with keyword and part-of-speech analysis and validated zero-shot
-        with Qwen3-VL-8B. The remaining questions are scored with Chain-of-Thought prompting, and the final difficulty
-        score is a weighted ensemble in which the higher Gemini weight reflects its stronger reasoning on Levels 5–6:</p>
-      $$S_{\text{final}} = 0.7 \cdot S_{\text{Gem}} + 0.3 \cdot S_{\text{Qwen}}$$
-    </div>
-  </div>
-</section>
-
-<!-- ================= Statistics ================= -->
-<section class="section alt" id="statistics">
-  <div class="container is-max-desktop">
-    <div class="section-head">
-      <p class="section-kicker">Statistics</p>
-      <h2 class="title is-2">Dataset at a Glance</h2>
-      <p class="lead">To our knowledge, the largest Vietnamese VQA dataset grounded in real-world news articles.
-        Splits are stratified at the image level (5 : 2 : 2 : 1), and Test 1 → Test 3 increase in reasoning difficulty.</p>
-    </div>
-
-    <div class="tabs is-centered vn-tabs" data-tabs="stats">
-      <ul>
-        <li class="is-active"><a data-tab="stats-splits">Splits</a></li>
-        <li><a data-tab="stats-sources">Sources &amp; Domains</a></li>
-        <li><a data-tab="stats-difficulty">Difficulty</a></li>
-        <li><a data-tab="stats-language">Language</a></li>
-      </ul>
-    </div>
-
-    <!-- Splits -->
-    <div class="tab-pane is-active" id="stats-splits">
-      <div class="table-wrap">
-        <table class="vn-table" id="table-overall"><!-- rendered by index.js --></table>
-      </div>
-      <p class="table-note">Overall statistics of VNCultureVQA per official split.</p>
-    </div>
-
-    <!-- Sources & domains -->
-    <div class="tab-pane" id="stats-sources">
-      <div class="columns">
-        <div class="column is-6">
-          <div class="chart-card">
-            <h4>Images per news outlet</h4>
-            <p class="chart-sub">107,947 images from eight professionally edited Vietnamese platforms.</p>
-            <div class="chart-wrap tall"><canvas id="chart-sources" aria-label="Horizontal bar chart of images per source" role="img"></canvas></div>
-          </div>
+        <div class="is-size-5 publication-authors">
+          <!-- TODO: author homepage links -->
+          <span class="author-block"><a href="#">Van-Phuc Phan</a><sup>1,2†</sup></span>
+          <span class="author-block"><a href="#">Minh-Tan Pham</a><sup>1,2†</sup></span>
+          <span class="author-block"><a href="#">Trung-Nghia Le</a><sup>1,2‡</sup></span>
         </div>
-        <div class="column is-6">
-          <div class="chart-card">
-            <h4>Image semantic categories</h4>
-            <p class="chart-sub">Share of images (%) assigned during caption generation.</p>
-            <div class="chart-wrap tall"><canvas id="chart-categories" aria-label="Horizontal bar chart of image categories" role="img"></canvas></div>
+        <div class="affiliations publication-authors">
+          <span class="author-block"><sup>1</sup>University of Science, Ho Chi Minh City, Vietnam</span>
+          <span class="author-block"><sup>2</sup>Vietnam National University, Ho Chi Minh City, Vietnam</span>
+        </div>
+        <p class="contrib-note"><sup>†</sup>Equal contribution &nbsp;·&nbsp; <sup>‡</sup>Corresponding author</p>
+
+        <!-- TODO: replace every href="#" below with the real links -->
+        <div class="publication-links">
+          <a href="#" class="button is-normal" title="Link coming soon">
+            <span class="icon"><i class="fas fa-file-pdf"></i></span><span>Paper</span><span class="todo">TODO</span>
+          </a>
+          <a href="#" class="button is-normal" title="Link coming soon">
+            <span class="icon"><i class="ai ai-arxiv"></i></span><span>arXiv</span><span class="todo">TODO</span>
+          </a>
+          <a href="https://anonymous.4open.science/r/VNCultureVQA-DEB6" class="button is-normal" title="Code">
+            <span class="icon"><i class="fab fa-github"></i></span><span>Code</span>
+          </a>
+          <a href="https://drive.google.com/drive/u/1/folders/11SyFDKgpepaLyvYNwgJT9htCyPNxV64d"
+            class="button is-normal" title="Dataset on Hugging Face">
+            <span class="icon"><i class="fas fa-database"></i></span><span>Dataset</span>
+          </a>
+          <a href="https://huggingface.co/datasets/multimedia-synergy-lab/VNCultureVQA" class="button is-normal"
+            title="Link coming soon">
+            <span class="icon" aria-hidden="true">🤗</span><span>Hugging Face</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= Hero gallery ================= -->
+  <section class="mosaic-band">
+    <div class="container is-max-desktop">
+      <!-- Tiles come from VNC_DATA.gallery (static/js/data.js) -->
+      <div class="mosaic" id="hero-mosaic" aria-label="Sample images from VNCultureVQA"></div>
+      <p class="mosaic-caption">Representative images from <b>VNCultureVQA</b> — festivals, traditional arts, heritage
+        sites and community life.</p>
+    </div>
+  </section>
+
+  <!-- ================= Stat cards ================= -->
+  <section class="stats-band">
+    <div class="container is-max-desktop">
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-value">28,655</div>
+          <div class="stat-label">cultural articles</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">107,947</div>
+          <div class="stat-label">image–article pairs</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">691,830</div>
+          <div class="stat-label">QA pairs</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">6</div>
+          <div class="stat-label">cognitive levels</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">8</div>
+          <div class="stat-label">Vietnamese news outlets</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= Overview: Abstract ================= -->
+  <section class="section alt" id="overview">
+    <div class="container is-max-desktop">
+      <div class="section-head">
+        <p class="section-kicker">Overview</p>
+        <h2 class="title is-2">Abstract</h2>
+      </div>
+      <div class="columns is-centered">
+        <div class="column is-11">
+          <div class="content has-text-justified">
+            <p>
+              Visual Question Answering (VQA) in low-resource languages remains largely disconnected from the cultural
+              and contextual knowledge required to interpret real-world imagery. Existing Vietnamese VQA benchmarks
+              primarily treat images as isolated inputs, limiting evaluation to visual recognition rather than
+              knowledge-grounded multimodal reasoning. We introduce <span class="brand-name">VNCultureVQA</span>, a
+              large-scale benchmark for Vietnamese cultural understanding that jointly grounds images and questions in
+              real-world cultural articles, linking each image to its source article, human-authored caption, and
+              contextual knowledge. VNCultureVQA contains <strong>107,947 image–article pairs</strong> and
+              <strong>691,830 question–answer pairs</strong> spanning <strong>six cognitive levels</strong>, from visual
+              recognition to global contextual synthesis.
+            </p>
+            <p>
+              The benchmark supports knowledge-grounded generative VQA under progressively enriched contextual settings,
+              enabling evaluation of visual understanding and culturally grounded multimodal reasoning. We further
+              establish three progressively enriched evaluation settings, ranging from image-only VQA to
+              article-grounded
+              VQA and supervised domain adaptation. Experiments with representative Vietnamese and multilingual
+              vision-language models show consistent gains from contextual grounding, while consensus and lexical scores
+              degrade steadily as reasoning demands increase and supervised domain adaptation yields uneven
+              improvements,
+              revealing persistent limitations in current multimodal models.
+            </p>
           </div>
         </div>
       </div>
-      <p class="chart-caption">Events/Ceremonies dominate (43.2%), reflecting the news-centric source material; Traditional
-        Arts and Culture add a further 33.7%, spanning tangible monuments, intangible traditions and daily community life.</p>
-    </div>
 
-    <!-- Difficulty -->
-    <div class="tab-pane" id="stats-difficulty">
-      <figure class="paper-figure framed">
-        <img src="./static/images/difficulty_per_split.webp" width="1800" height="660" loading="lazy"
-             alt="Difficulty level distribution and composition per split.">
-        <figcaption><b>Difficulty across splits.</b> Harder test splits concentrate Level 5–6 questions.
-          <span class="todo">TODO: figure labels read Val1/Val2/Test — regenerate as Test 1/2/3</span></figcaption>
-      </figure>
     </div>
+  </section>
 
-    <!-- Language -->
-    <div class="tab-pane" id="stats-language">
-      <figure class="paper-figure framed">
-        <img src="./static/images/length_distribution.webp" width="1800" height="1185" loading="lazy"
-             alt="Histograms of question and answer length in characters and words.">
-        <figcaption><b>Question &amp; answer length.</b> Questions average 16.9 words and answers 32.6 words —
-          open-ended, generative responses rather than single-word answers.</figcaption>
-      </figure>
-    </div>
-  </div>
-</section>
-
-<!-- ================= Examples ================= -->
-<section class="section" id="examples">
-  <div class="container is-max-desktop">
-    <div class="section-head">
-      <p class="section-kicker">Examples</p>
-      <h2 class="title is-2">Dataset Samples</h2>
-      <p class="lead">Each sample links an image to its source article, caption and a Vietnamese question–answer pair.</p>
-    </div>
-  </div>
-  <div class="container is-max-desktop">
-    <!-- Cards come from VNC_DATA.examples (static/js/data.js) -->
-    <div class="example-grid" id="example-grid"></div>
-  </div>
-</section>
-
-<!-- ================= Results ================= -->
-<section class="section alt" id="results">
-  <div class="container is-max-desktop">
-    <div class="section-head">
-      <p class="section-kicker">Results</p>
-      <h2 class="title is-2">Benchmark Results</h2>
-      <p class="lead">Four open-source VLMs across three context levels and three difficulty-stratified test splits.</p>
-    </div>
-
-    <p class="content" style="color: var(--ink-2); text-align: center;">
-      <span class="lvl-pill L1">L1</span> image + question &nbsp;·&nbsp;
-      <span class="lvl-pill L2">L2</span> + caption + article (zero-shot) &nbsp;·&nbsp;
-      <span class="lvl-pill L3">L3</span> fine-tuned<br>
-      Highlighted cells mark the best value per column within each split (lowest for latency); underlined cells mark
-      the runner-up.</p>
-    <div class="tabs vn-tabs" data-tabs="results">
-      <ul>
-        <li class="is-active"><a data-tab="res-Test 1">Test 1 · Easy</a></li>
-        <li><a data-tab="res-Test 2">Test 2 · Medium</a></li>
-        <li><a data-tab="res-Test 3">Test 3 · Hard</a></li>
-      </ul>
-    </div>
-    <div id="results-tables"><!-- rendered by index.js --></div>
-    <h3 class="sub-title" style="margin-top: 3rem;">Limitations</h3>
-    <details class="discuss">
-      <summary>Discussion &amp; limitations</summary>
-      <div class="content">
-        <p>Gemini-generated QA pairs carry risks of stylistic homogeneity and hallucination, and web-sourced content
-          may partially inflate zero-shot performance through pretraining-corpus overlap — a contamination risk that
-          InfoSeek addressed with Unseen-Entity splits not yet provided here. Monolingual coverage limits
-          cross-lingual evaluation compared with SEA-VQA and CVQA.</p>
-        <p>On the societal side, the dataset supports culturally aware vision-language models and the digital
-          preservation of Vietnamese heritage for education, though LLM-generated content may encode factual errors.
-          Reliance on major publications introduces representational bias toward dominant cultural narratives,
-          partially mitigated by detailed source documentation and human verification of the full test split.</p>
+  <!-- ================= Dataset construction ================= -->
+  <section class="section" id="dataset">
+    <div class="container is-max-desktop">
+      <div class="section-head">
+        <p class="section-kicker">Dataset</p>
+        <h2 class="title is-2">Construction Pipeline</h2>
+        <p class="lead">Each article is modelled as a <em>unified multimodal knowledge source</em>: full body text,
+          embedded images and human-authored captions are kept together, so every question is grounded in the
+          narrative its image came from.</p>
       </div>
-    </details>
-  </div>
-</section>
 
-<!-- ================= Citation ================= -->
-<section class="section" id="citation">
-  <div class="container is-max-desktop">
-    <div class="section-head">
-      <p class="section-kicker">Citation</p>
-      <h2 class="title is-2">BibTeX</h2>
+      <figure class="paper-figure framed">
+        <img src="./static/images/pipeline.webp" width="1053" height="575" loading="lazy"
+          alt="Five-stage pipeline: web crawl, caption generation with Qwen3-VL-8B, question generation and answer generation with Gemini 3 Pro, and verification with Llama 3 8B.">
+        <figcaption><b>Multi-stage construction pipeline.</b> Articles crawled from eight Vietnamese news platforms are
+          captioned with Qwen3-VL-8B, turned into questions and article-grounded answers with Gemini 3 Pro, and
+          verified against the source article with Llama 3 8B.</figcaption>
+      </figure>
+
+      <!-- Taxonomy -->
+      <h3 class="sub-title" id="taxonomy">Six-level cognitive taxonomy</h3>
+      <p class="content" style="color: var(--ink-2);">
+        Questions are organised into three meta-groups. Purely visual questions are deliberately capped at 8.2% to
+        mitigate visual shortcuts and language priors; <strong>92.0%</strong> of questions require multimodal
+        integration or higher-level reasoning.
+      </p>
+      <div class="columns" id="taxonomy-cards"><!-- rendered by index.js --></div>
+      <div class="content prose">
+        <p>Visual-only questions are first detected with keyword and part-of-speech analysis and validated zero-shot
+          with Qwen3-VL-8B. The remaining questions are scored with Chain-of-Thought prompting, and the final difficulty
+          score is a weighted ensemble in which the higher Gemini weight reflects its stronger reasoning on Levels 5–6:
+        </p>
+        $$S_{\text{final}} = 0.7 \cdot S_{\text{Gem}} + 0.3 \cdot S_{\text{Qwen}}$$
+      </div>
     </div>
-    <!-- TODO: replace with the final BibTeX entry -->
-    <div class="bibtex-box">
-      <button class="copy-btn" data-copy="bibtex-code"><i class="far fa-copy"></i> Copy</button>
-      <pre><code id="bibtex-code">@inproceedings{TODO_vnculturevqa2027,
+  </section>
+
+  <!-- ================= Statistics ================= -->
+  <section class="section alt" id="statistics">
+    <div class="container is-max-desktop">
+      <div class="section-head">
+        <p class="section-kicker">Statistics</p>
+        <h2 class="title is-2">Dataset at a Glance</h2>
+        <p class="lead">To our knowledge, the largest Vietnamese VQA dataset grounded in real-world news articles.
+          Splits are stratified at the image level (5 : 2 : 2 : 1), and Test 1 → Test 3 increase in reasoning
+          difficulty.</p>
+      </div>
+
+      <div class="tabs is-centered vn-tabs" data-tabs="stats">
+        <ul>
+          <li class="is-active"><a data-tab="stats-splits">Splits</a></li>
+          <li><a data-tab="stats-sources">Sources &amp; Domains</a></li>
+          <li><a data-tab="stats-difficulty">Difficulty</a></li>
+          <li><a data-tab="stats-language">Language</a></li>
+        </ul>
+      </div>
+
+      <!-- Splits -->
+      <div class="tab-pane is-active" id="stats-splits">
+        <div class="table-wrap">
+          <table class="vn-table" id="table-overall"><!-- rendered by index.js --></table>
+        </div>
+        <p class="table-note">Overall statistics of VNCultureVQA per official split.</p>
+      </div>
+
+      <!-- Sources & domains -->
+      <div class="tab-pane" id="stats-sources">
+        <div class="columns">
+          <div class="column is-6">
+            <div class="chart-card">
+              <h4>Images per news outlet</h4>
+              <p class="chart-sub">107,947 images from eight professionally edited Vietnamese platforms.</p>
+              <div class="chart-wrap tall"><canvas id="chart-sources"
+                  aria-label="Horizontal bar chart of images per source" role="img"></canvas></div>
+            </div>
+          </div>
+          <div class="column is-6">
+            <div class="chart-card">
+              <h4>Image semantic categories</h4>
+              <p class="chart-sub">Share of images (%) assigned during caption generation.</p>
+              <div class="chart-wrap tall"><canvas id="chart-categories"
+                  aria-label="Horizontal bar chart of image categories" role="img"></canvas></div>
+            </div>
+          </div>
+        </div>
+        <p class="chart-caption">Events/Ceremonies dominate (43.2%), reflecting the news-centric source material;
+          Traditional
+          Arts and Culture add a further 33.7%, spanning tangible monuments, intangible traditions and daily community
+          life.</p>
+      </div>
+
+      <!-- Difficulty -->
+      <div class="tab-pane" id="stats-difficulty">
+        <figure class="paper-figure framed">
+          <img src="./static/images/difficulty_per_split.webp" width="1800" height="660" loading="lazy"
+            alt="Difficulty level distribution and composition per split.">
+          <figcaption><b>Difficulty across splits.</b> Harder test splits concentrate Level 5–6 questions.
+            <span class="todo">TODO: figure labels read Val1/Val2/Test — regenerate as Test 1/2/3</span>
+          </figcaption>
+        </figure>
+      </div>
+
+      <!-- Language -->
+      <div class="tab-pane" id="stats-language">
+        <figure class="paper-figure framed">
+          <img src="./static/images/length_distribution.webp" width="1800" height="1185" loading="lazy"
+            alt="Histograms of question and answer length in characters and words.">
+          <figcaption><b>Question &amp; answer length.</b> Questions average 16.9 words and answers 32.6 words —
+            open-ended, generative responses rather than single-word answers.</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= Examples ================= -->
+  <section class="section" id="examples">
+    <div class="container is-max-desktop">
+      <div class="section-head">
+        <p class="section-kicker">Examples</p>
+        <h2 class="title is-2">Dataset Samples</h2>
+        <p class="lead">Each sample links an image to its source article, caption and a Vietnamese question–answer pair.
+        </p>
+      </div>
+    </div>
+    <div class="container is-max-desktop">
+      <!-- Cards come from VNC_DATA.examples (static/js/data.js) -->
+      <div class="example-grid" id="example-grid"></div>
+    </div>
+  </section>
+
+  <!-- ================= Results ================= -->
+  <section class="section alt" id="results">
+    <div class="container is-max-desktop">
+      <div class="section-head">
+        <p class="section-kicker">Results</p>
+        <h2 class="title is-2">Benchmark Results</h2>
+        <p class="lead">Four open-source VLMs across three context levels and three difficulty-stratified test splits.
+        </p>
+      </div>
+
+      <p class="content" style="color: var(--ink-2); text-align: center;">
+        <span class="lvl-pill L1">L1</span> image + question &nbsp;·&nbsp;
+        <span class="lvl-pill L2">L2</span> + caption + article (zero-shot) &nbsp;·&nbsp;
+        <span class="lvl-pill L3">L3</span> fine-tuned<br>
+        Highlighted cells mark the best value per column within each split (lowest for latency); underlined cells mark
+        the runner-up.
+      </p>
+      <div class="tabs vn-tabs" data-tabs="results">
+        <ul>
+          <li class="is-active"><a data-tab="res-Test 1">Test 1 · Easy</a></li>
+          <li><a data-tab="res-Test 2">Test 2 · Medium</a></li>
+          <li><a data-tab="res-Test 3">Test 3 · Hard</a></li>
+        </ul>
+      </div>
+      <div id="results-tables"><!-- rendered by index.js --></div>
+      <h3 class="sub-title" style="margin-top: 3rem;">Limitations</h3>
+      <details class="discuss">
+        <summary>Discussion &amp; limitations</summary>
+        <div class="content">
+          <p>Gemini-generated QA pairs carry risks of stylistic homogeneity and hallucination, and web-sourced content
+            may partially inflate zero-shot performance through pretraining-corpus overlap — a contamination risk that
+            InfoSeek addressed with Unseen-Entity splits not yet provided here. Monolingual coverage limits
+            cross-lingual evaluation compared with SEA-VQA and CVQA.</p>
+          <p>On the societal side, the dataset supports culturally aware vision-language models and the digital
+            preservation of Vietnamese heritage for education, though LLM-generated content may encode factual errors.
+            Reliance on major publications introduces representational bias toward dominant cultural narratives,
+            partially mitigated by detailed source documentation and human verification of the full test split.</p>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ================= Citation ================= -->
+  <section class="section" id="citation">
+    <div class="container is-max-desktop">
+      <div class="section-head">
+        <p class="section-kicker">Citation</p>
+        <h2 class="title is-2">BibTeX</h2>
+      </div>
+      <!-- TODO: replace with the final BibTeX entry -->
+      <div class="bibtex-box">
+        <button class="copy-btn" data-copy="bibtex-code"><i class="far fa-copy"></i> Copy</button>
+        <pre><code id="bibtex-code">@inproceedings{TODO_vnculturevqa2027,
   title     = {VNCultureVQA: Benchmarking VQA for Vietnamese Cultural Events},
   author    = {Phan, Van-Phuc and Pham, Minh-Tan and Le, Trung-Nghia},
   booktitle = {TODO},
   year      = {2027}
 }</code></pre>
+      </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- ================= Footer ================= -->
-<footer class="footer site-footer">
-  <div class="container is-max-desktop has-text-centered">
-    <p class="footer-brand">VNCultureVQA</p>
-    <p style="margin: 0.75rem 0 1.25rem;">
-      <!-- TODO: footer links -->
-      <a class="icon-link" href="#" title="Paper (coming soon)"><i class="fas fa-file-pdf"></i></a>
-      <a class="icon-link" href="#" title="Code (coming soon)"><i class="fab fa-github"></i></a>
-      <a class="icon-link" href="#" title="Dataset (coming soon)"><i class="fas fa-database"></i></a>
-    </p>
-    <p>
-      This website is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
-      Commons Attribution-ShareAlike 4.0 International License</a>. Template adapted from
-      <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>.
-    </p>
-  </div>
-</footer>
+  <!-- ================= Footer ================= -->
+  <footer class="footer site-footer">
+    <div class="container is-max-desktop has-text-centered">
+      <p class="footer-brand">VNCultureVQA</p>
+      <p style="margin: 0.75rem 0 1.25rem;">
+        <!-- TODO: footer links -->
+        <a class="icon-link" href="#" title="Paper (coming soon)"><i class="fas fa-file-pdf"></i></a>
+        <a class="icon-link" href="#" title="Code (coming soon)"><i class="fab fa-github"></i></a>
+        <a class="icon-link" href="#" title="Dataset (coming soon)"><i class="fas fa-database"></i></a>
+      </p>
+      <p>
+        This website is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+          Commons Attribution-ShareAlike 4.0 International License</a>. Template adapted from
+        <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>.
+      </p>
+    </div>
+  </footer>
 
-<div class="lightbox" id="lightbox" aria-hidden="true"><img alt=""></div>
+  <div class="lightbox" id="lightbox" aria-hidden="true"><img alt=""></div>
 
 </body>
+
 </html>

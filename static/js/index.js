@@ -58,31 +58,6 @@
   }
 
   /* ------------------------------------------------------------------
-     Count-up stat cards
-     ------------------------------------------------------------------ */
-  function countUp(el) {
-    var target = +el.getAttribute('data-count');
-    if (reducedMotion || target < 10) { el.textContent = fmtInt(target); return; }
-    var start = null, dur = 1200;
-    function frame(ts) {
-      if (start === null) start = ts;
-      var p = Math.min(1, (ts - start) / dur);
-      var eased = 1 - Math.pow(1 - p, 3);
-      el.textContent = fmtInt(Math.round(target * eased));
-      if (p < 1) requestAnimationFrame(frame);
-    }
-    requestAnimationFrame(frame);
-  }
-  if ('IntersectionObserver' in window) {
-    var countObserver = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) {
-        if (e.isIntersecting) { countUp(e.target); countObserver.unobserve(e.target); }
-      });
-    }, { threshold: 0.6 });
-    $$('.stat-value[data-count]').forEach(function (el) { countObserver.observe(el); });
-  }
-
-  /* ------------------------------------------------------------------
      Tables
      ------------------------------------------------------------------ */
   function renderOverallTable() {
@@ -202,7 +177,6 @@
         '<div class="qa">' +
         '<p class="q"><span class="lbl">Q</span>' + escapeHtml(ex.q) + '</p>' +
         '<p><span class="lbl">A</span>' + escapeHtml(ex.a) + '</p>' +
-        (ex.pred ? '<p class="pred"><span class="lbl">Model prediction:</span>' + escapeHtml(ex.pred) + '</p>' : '') +
         '</div></article>';
     }).join('');
   }
