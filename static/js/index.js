@@ -381,17 +381,6 @@
     segmented(g, function (v) { img.src = pattern.replace('{v}', v); });
   });
 
-  // Word cloud viewer
-  var wc = { split: 'train', field: 'question' };
-  var splitNames = { train: 'train', test1: 'Test 1', test2: 'Test 2', test3: 'Test 3' };
-  function updateWordcloud() {
-    var img = $('#wc-img');
-    img.src = './static/images/wc_' + wc.split + '_' + wc.field + '.webp';
-    img.alt = 'Word cloud of English-translated ' + wc.field + 's in the ' + splitNames[wc.split] + ' split.';
-  }
-  segmented($('.segmented[data-wc="split"]'), function (v) { wc.split = v; updateWordcloud(); });
-  segmented($('.segmented[data-wc="field"]'), function (v) { wc.field = v; updateWordcloud(); });
-
   buildVisibleCharts();
 
   /* ------------------------------------------------------------------
@@ -410,7 +399,7 @@
   var lightbox = $('#lightbox');
   var lightImg = lightbox && $('img', lightbox);
   document.addEventListener('click', function (e) {
-    var img = e.target.closest && e.target.closest('.paper-figure img, .example-card img, .wc-frame img, .mosaic img');
+    var img = e.target.closest && e.target.closest('.paper-figure img, .example-card img, .mosaic img');
     if (img && lightbox) {
       lightImg.src = img.currentSrc || img.src;
       lightImg.alt = img.alt;

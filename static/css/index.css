@@ -337,12 +337,6 @@ table.vn-table td.second { text-decoration: underline; text-decoration-color: va
 .lvl-pill.L2 { background: var(--ord-2); }
 .lvl-pill.L3 { background: var(--ord-3); }
 
-/* ---------- Wordcloud viewer ---------- */
-.wc-frame {
-  background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 0.75rem;
-}
-.wc-frame img { display: block; width: 100%; height: auto; border-radius: 8px; cursor: zoom-in; }
-
 /* ---------- Discussion (details) ---------- */
 details.discuss {
   background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 1rem 1.25rem;
