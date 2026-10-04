@@ -61,9 +61,6 @@
 <section class="hero site-hero" id="top">
   <div class="hero-body">
     <div class="container is-max-desktop has-text-centered">
-      <!-- TODO: confirm venue / track wording (e.g. "WACV 2027 · Datasets Track") -->
-      <span class="venue-badge"><i class="fas fa-landmark"></i> WACV 2027</span>
-
       <h1 class="title is-1 publication-title">
         <span class="brand-name">VNCultureVQA</span>
         Benchmarking VQA for Vietnamese Cultural Events
@@ -224,16 +221,6 @@
         <table class="vn-table" id="table-overall"><!-- rendered by index.js --></table>
       </div>
       <p class="table-note">Overall statistics of VNCultureVQA per official split.</p>
-      <div class="columns" style="margin-top: 1.25rem;">
-        <div class="column is-12">
-          <div class="chart-card">
-            <h4>Questions and answers get longer in harder splits</h4>
-            <p class="chart-sub">Average length in words. Every image is also linked to a contextual caption averaging 97.7 words.</p>
-            <div class="chart-legend" id="legend-lengths"></div>
-            <div class="chart-wrap short"><canvas id="chart-lengths" aria-label="Grouped bar chart of average question and answer length per split" role="img"></canvas></div>
-          </div>
-        </div>
-      </div>
     </div>
 
     <!-- Sources & domains -->
@@ -275,22 +262,6 @@
              alt="Histograms of question and answer length in characters and words.">
         <figcaption><b>Question &amp; answer length.</b> Questions average 16.9 words and answers 32.6 words —
           open-ended, generative responses rather than single-word answers.</figcaption>
-      </figure>
-
-      <h3 class="sub-title">Question types</h3>
-      <div class="control-row">
-        <span class="control-label">Split</span>
-        <div class="segmented" data-swap="qtype-img" data-pattern="./static/images/qtype_{v}.webp">
-          <button class="is-active" data-v="train">Train</button>
-          <button data-v="test1">Test 1</button>
-          <button data-v="test2">Test 2</button>
-          <button data-v="test3">Test 3</button>
-        </div>
-      </div>
-      <figure class="paper-figure framed">
-        <img id="qtype-img" src="./static/images/qtype_train.webp" width="1600" height="800" loading="lazy"
-             alt="Question type counts by first word (English translation) for the selected split.">
-        <figcaption><b>Question type counts</b> by first word of the English-translated question.</figcaption>
       </figure>
     </div>
   </div>

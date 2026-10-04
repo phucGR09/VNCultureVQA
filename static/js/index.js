@@ -11,8 +11,6 @@
     ink: tok('--ink'), ink2: tok('--ink-2'), muted: tok('--muted'), surface: tok('--surface'),
     red: tok('--red'), single: tok('--single'),
     grid: '#ece6dc', axis: '#d6cec3',
-    // Categorical slots (validated): one per model, fixed order
-    series: [tok('--series-1'), tok('--series-2'), tok('--series-3'), tok('--series-4')],
     // Ordinal red ramp (validated): context levels L1→L3 / difficulty meta-groups
     ord: [tok('--ord-1'), tok('--ord-2'), tok('--ord-3')]
   };
@@ -228,7 +226,7 @@
     Chart.defaults.borderColor = C.grid;
     Chart.defaults.maintainAspectRatio = false;
     Chart.defaults.animation.duration = reducedMotion ? 0 : 600;
-    // Legends are HTML (see renderLegend) so they wrap and use text tokens
+    // Remaining charts are single-series and labelled directly
     Chart.defaults.plugins.legend.display = false;
     Chart.defaults.plugins.tooltip.backgroundColor = C.ink;
     Chart.defaults.plugins.tooltip.titleColor = '#fff';
@@ -260,43 +258,8 @@
     }
   };
 
-  function renderLegend(id, items, line) {
-    var el = document.getElementById(id);
-    if (!el) return;
-    el.innerHTML = items.map(function (it) {
-      return '<span class="item"><span class="sw' + (line ? ' line' : '') + '" style="background:' + it.color +
-        '"></span>' + it.label + '</span>';
-    }).join('');
-  }
-
   var gridX = function (show) { return { display: show, color: C.grid, drawTicks: false }; };
   var bar = { borderRadius: 4, borderSkipped: 'start', borderWidth: 0 };
-
-  builders['chart-lengths'] = function (el) {
-    var q = D.overall[4].values, a = D.overall[5].values;
-    renderLegend('legend-lengths', [{ label: 'Avg. question length', color: C.series[0] },
-                                    { label: 'Avg. answer length', color: C.series[1] }]);
-    return new Chart(el, {
-      type: 'bar',
-      data: {
-        labels: D.splits,
-        datasets: [
-          Object.assign({ label: 'Avg. question length', data: q, backgroundColor: C.series[0] }, bar),
-          Object.assign({ label: 'Avg. answer length', data: a, backgroundColor: C.series[1] }, bar)
-        ]
-      },
-      options: {
-        datasets: { bar: { categoryPercentage: 0.6, barPercentage: 0.9 } },
-        scales: {
-          x: { grid: { display: false }, border: { color: C.axis } },
-          y: { beginAtZero: true, grid: gridX(true), border: { display: false }, title: { display: true, text: 'words' } }
-        },
-        plugins: {
-          tooltip: { callbacks: { label: function (i) { return ' ' + i.dataset.label + ': ' + i.parsed.y.toFixed(2) + ' words'; } } }
-        }
-      }
-    });
-  };
 
   function horizontalBar(el, labels, data, colors, fmt, xOpts, padRight) {
     return new Chart(el, {
@@ -347,7 +310,7 @@
   }
 
   /* ------------------------------------------------------------------
-     Tabs & segmented controls
+     Tabs
      ------------------------------------------------------------------ */
   $$('.tabs[data-tabs]').forEach(function (tabs) {
     var links = $$('a[data-tab]', tabs);
@@ -361,24 +324,6 @@
         buildVisibleCharts();
       });
     });
-  });
-
-  function segmented(group, onChange) {
-    if (!group) return;
-    var buttons = $$('button', group);
-    buttons.forEach(function (b) {
-      b.addEventListener('click', function () {
-        buttons.forEach(function (x) { x.classList.toggle('is-active', x === b); });
-        onChange(b.getAttribute('data-v'));
-      });
-    });
-  }
-
-  // Image swappers (question types)
-  $$('.segmented[data-swap]').forEach(function (g) {
-    var img = document.getElementById(g.getAttribute('data-swap'));
-    var pattern = g.getAttribute('data-pattern');
-    segmented(g, function (v) { img.src = pattern.replace('{v}', v); });
   });
 
   buildVisibleCharts();
