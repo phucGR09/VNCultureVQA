@@ -2,25 +2,46 @@
 // Tables and charts are rendered from this object so values live in one place.
 window.VNC_DATA = {
 
-  // Hero mosaic (30 tiles). Real photos are cropped from the paper figures; the
-  // remaining slots load static/images/gallery/NN.webp and show a placeholder tile
-  // until that file exists. TODO: add dataset photos as gallery/01.webp … 30.webp.
+  // Hero mosaic (30 tiles). Dataset photos live in static/images/samples/*.jpg and
+  // are shown through small WebP thumbnails in static/images/gallery/ (same id);
+  // clicking a tile opens the full-size original. The paper-figure crops have no
+  // separate original. A tile whose image fails to load shows a placeholder.
   gallery: (function () {
-    var real = {
-      0:  { src: "./static/images/samples/songco.webp",     alt: "Sán Chỉ artists performing Sóong Cọ singing" },
-      4:  { src: "./static/images/samples/phuocbien.webp",  alt: "Khmer Phước Biển festival in Sóc Trăng" },
-      8:  { src: "./static/images/samples/quanho.webp",     alt: "Quan họ singing in a traditional house in Hà Nội" },
-      12: { src: "./static/images/samples/thuongtieu.webp", alt: "Thượng Tiêu ceremonial pole at the start of spring" },
-      16: { src: "./static/images/samples/quangtri.webp",   alt: "Visitors at the Quảng Trị Citadel" },
-      20: { src: "./static/images/samples/gate.webp",       alt: "Traditional gate of a historic relic" },
-      24: { src: "./static/images/samples/longdoison.webp", alt: "Long Đọi Sơn pagoda" },
-      28: { src: "./static/images/samples/hoian.webp",      alt: "Welcoming ceremony in Hội An" }
-    };
-    var out = [];
-    for (var i = 0; i < 30; i++) {
-      out.push(real[i] || { src: "./static/images/gallery/" + String(i + 1).padStart(2, "0") + ".webp", alt: "" });
-    }
-    return out;
+    var S = "./static/images/samples/", G = "./static/images/gallery/";
+    function photo(id, alt) { return { src: G + id + ".webp", full: S + id + ".jpg", alt: alt }; }
+    function crop(name, alt) { return { src: S + name + ".webp", alt: alt }; }
+    return [
+      crop("songco", "Sán Chỉ artists performing Sóong Cọ singing"),
+      photo("00a95e582ed40935", "Woman arranging flowers at a street market"),
+      photo("00a960fe793d939e", "Visitors posing with an elderly woman at a flower stall"),
+      photo("0a08576030624898", "Men competing in a traditional tug-of-war on the ground"),
+      crop("phuocbien", "Khmer Phước Biển festival in Sóc Trăng"),
+      photo("0a26621dd0193ec9", "Festival flags and decorated boats on a beach"),
+      photo("0a28aedab33ecec1", "Film scene of two men by candlelight"),
+      photo("0a313cd707ce2e25", "Children running beneath rows of red lanterns"),
+      crop("quanho", "Quan họ singing in a traditional house in Hà Nội"),
+      photo("0a38248f66cb1911", "Dragon-boat race on a river"),
+      photo("0a552d45599b05f4", "Performer in a traditional opera costume on stage"),
+      photo("0a586986b0739fb7", "Temple courtyard lit with lanterns at night"),
+      crop("thuongtieu", "Thượng Tiêu ceremonial pole at the start of spring"),
+      photo("0a6d62c51cd79c15", "Dance troupe performing on stage"),
+      photo("0a8264b53604375b", "Horse cart and cyclist on a rural road"),
+      photo("0aa454fac1b0637f", "Karst mountains rising above rice fields"),
+      crop("quangtri", "Visitors at the Quảng Trị Citadel"),
+      photo("0aa4da4f289e2b39", "Ancient Hán-Nôm imperial document"),
+      photo("0abf246cf3af8a53", "Artists on stage at a traditional music awards ceremony"),
+      photo("0abf8357a5a70fc9", "Golden Buddha statue at an outdoor festival"),
+      crop("gate", "Traditional gate of a historic relic"),
+      photo("0ac5fe926f6435c6", "Bamboo-style pavilion beside a reflecting pool"),
+      photo("0aed11f61f1c20bf", "Riders in a traditional horse race"),
+      photo("0afae4851a9e8b8a", "Diplomatic meeting in a reception room"),
+      crop("longdoison", "Long Đọi Sơn pagoda"),
+      photo("0b1ed7739824c63c", "Illuminated monument reflected in water at night"),
+      photo("0b5f11f39ff7b4ed", "Boats moored at a river market"),
+      photo("0b74ce411d4b9463", "Courtyard of a traditional temple with tiled roofs"),
+      crop("hoian", "Welcoming ceremony in Hội An"),
+      photo("0b8a56cab307363c", "Photo exhibition hall with flower displays")
+    ];
   })(),
 
   // Dataset samples (3 × 2 grid). Q/A transcribed from the paper figures.

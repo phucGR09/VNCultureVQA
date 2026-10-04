@@ -183,8 +183,8 @@
     var host = $('#hero-mosaic');
     if (!host || !D.gallery) return;
     host.innerHTML = D.gallery.map(function (g) {
-      return '<div class="tile"><img src="' + g.src + '" alt="' + escapeHtml(g.alt) + '" title="' + escapeHtml(g.alt) +
-        '" loading="lazy" decoding="async"></div>';
+      return '<div class="tile"><img src="' + g.src + '"' + (g.full ? ' data-full="' + g.full + '"' : '') +
+        ' alt="' + escapeHtml(g.alt) + '" title="' + escapeHtml(g.alt) + '" loading="lazy" decoding="async"></div>';
     }).join('');
     $$('img', host).forEach(function (img) {
       img.addEventListener('error', function () {
@@ -401,7 +401,8 @@
   document.addEventListener('click', function (e) {
     var img = e.target.closest && e.target.closest('.paper-figure img, .example-card img, .mosaic img');
     if (img && lightbox) {
-      lightImg.src = img.currentSrc || img.src;
+      // Gallery tiles show a thumbnail; open the full-size original when there is one
+      lightImg.src = img.getAttribute('data-full') || img.currentSrc || img.src;
       lightImg.alt = img.alt;
       lightbox.classList.add('is-open');
       lightbox.setAttribute('aria-hidden', 'false');
